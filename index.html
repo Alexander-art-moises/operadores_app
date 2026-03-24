@@ -4,286 +4,128 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Volcán · Planta Óxidos</title>
-<script src="datos.js"></script>
+<script>
+const PINES = {
+  "0000": { rol: "maestro" },
+  "1111": { rol: "supervisor" },
+  "2201": { rol: "operador", id: "OP-00100" },
+  "2202": { rol: "operador", id: "OP-00200" },
+  "2203": { rol: "operador", id: "OP-00300" },
+};
+const OPERADORES = [
+  {
+    id: "OP-00100",
+    nombre: "Pérez Quispe, Juan Carlos",
+    area: "Chancado",
+    cargo: "Operador de Chancado",
+    fechaIngresoEmpresa: "01/03/2019",
+    fechaIngresoPuesto: "15/06/2022",
+    foto: "https://drive.google.com/file/d/1DC9-_-DbnWpZnKqY0KljF-SQgS9kEwH7/view?usp=sharing",
+    riesgos: ["Trabajo en altura","Equipos en movimiento","Manipulación de Cargas"],
+    documentos: [
+      { tipo:"Certificación", nombre:"Trabajo en altura", emision:"10/01/2023", vencimiento:"10/01/2025", estado:"VENCIDO", pdf:"https://drive.google.com/file/d/1gN0q0P61JnsoJXfoYWjCl0OwXp7JVoQ1/view?usp=sharing" },
+      { tipo:"Capacitación", nombre:"Equipos en movimiento", emision:"05/03/2024", vencimiento:"05/03/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1xFNjBN7fTkgaCvlm-z0fKeOOVDYchFoG/view?usp=sharing" },
+      { tipo:"Capacitación", nombre:"Manipulación de Cargas", emision:"15/10/2024", vencimiento:"15/04/2025", estado:"POR VENCER", pdf:"https://drive.google.com/file/d/19wnkKp7I60kyw3QX3-_DFiLMeXESMIWk/view?usp=sharing" },
+    ],
+    medico_epp: [
+      { tipo:"Examen Médico", nombre:"Examen Ocupacional Anual", emision:"01/06/2024", vencimiento:"01/06/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing" },
+    ],
+  },
+  {
+    id: "OP-00200",
+    nombre: "García Torres, María Elena",
+    area: "Molienda",
+    cargo: "Operadora de Molienda",
+    fechaIngresoEmpresa: "10/07/2020",
+    fechaIngresoPuesto: "10/07/2020",
+    foto: "https://drive.google.com/file/d/1QhsIgQrtBqFJ_7d3W6aJml_-eMAj0iEY/view?usp=sharing",
+    riesgos: ["Riesgo eléctrico","Trabajo en espacios confinados"],
+    documentos: [
+      { tipo:"Certificación", nombre:"Riesgo eléctrico", emision:"20/06/2024", vencimiento:"20/06/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1FA_OKghXi-_rcDofBavcziQB9FMwOM9H/view?usp=sharing" },
+      { tipo:"Capacitación", nombre:"Trabajo en espacios confinados", emision:"01/11/2023", vencimiento:"01/11/2025", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1Q8R6aZcNm71giE2dgoSwfAzyxxsR3WoT/view?usp=sharing" },
+    ],
+    medico_epp: [
+      { tipo:"Examen Médico", nombre:"Examen Ocupacional Anual", emision:"15/08/2024", vencimiento:"15/08/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing" },
+    ],
+  },
+  {
+    id: "OP-00300",
+    nombre: "Rodríguez Lima, Carlos A.",
+    area: "Lixiviación",
+    cargo: "Operador de Lixiviación",
+    fechaIngresoEmpresa: "05/01/2018",
+    fechaIngresoPuesto: "01/03/2021",
+    foto: "https://drive.google.com/file/d/1JIRM62dhmycSRZxfvQZ6CokBBHUA7i9m/view?usp=sharing",
+    riesgos: ["Manipulación de Sustancias Químicas","Caída de objetos"],
+    documentos: [
+      { tipo:"Certificación", nombre:"Manipulación de Sustancias Químicas", emision:"12/04/2024", vencimiento:"12/04/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1PI3DCC7WMDosOy2dvex8X2Dpld9cr0Kr/view?usp=sharing" },
+    ],
+    medico_epp: [
+      { tipo:"Examen Médico", nombre:"Examen Ocupacional Anual", emision:"01/02/2025", vencimiento:"01/02/2027", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing" },
+    ],
+  },
+];
+function driveDirecto(url){const match=url.match(/\/d\/([a-zA-Z0-9_-]+)/);if(match)return`https://drive.google.com/thumbnail?id=${match[1]}&sz=w400`;return url;}
+function drivePreview(url){const match=url.match(/\/d\/([a-zA-Z0-9_-]+)/);if(match)return`https://drive.google.com/file/d/${match[1]}/preview`;return url;}
+function tiempoDesde(f){const[d,m,y]=f.split("/").map(Number);const desde=new Date(y,m-1,d);const hoy=new Date();let a=hoy.getFullYear()-desde.getFullYear();let ms=hoy.getMonth()-desde.getMonth();if(ms<0){a--;ms+=12;}if(a>0&&ms>0)return`${a} año${a>1?"s":""} ${ms} mes${ms>1?"es":""}`;if(a>0)return`${a} año${a>1?"s":""}`;return`${ms} mes${ms>1?"es":""}`;}
+</script>
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: Arial, sans-serif; background: #f0f4f8; min-height: 100vh; }
-
-  /* ── PIN SCREEN ── */
-  #pantalla-pin {
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 24px;
-    background: #f0f4f8;
-  }
-  .pin-card {
-    background: white;
-    border-radius: 16px;
-    padding: 32px 28px;
-    width: 100%;
-    max-width: 340px;
-    box-shadow: 0 2px 16px rgba(0,0,0,0.10);
-    text-align: center;
-  }
-  .logo-band {
-    background: #1F4E79;
-    color: white;
-    border-radius: 10px;
-    padding: 10px 18px;
-    font-size: 15px;
-    font-weight: bold;
-    letter-spacing: 1px;
-    margin-bottom: 20px;
-    display: inline-block;
-  }
-  .pin-card h2 { font-size: 17px; color: #1F4E79; margin-bottom: 6px; }
-  .pin-card p  { font-size: 13px; color: #666; margin-bottom: 22px; }
-  .pin-input {
-    width: 100%;
-    padding: 12px;
-    font-size: 22px;
-    text-align: center;
-    letter-spacing: 8px;
-    border: 2px solid #BDD7EE;
-    border-radius: 10px;
-    outline: none;
-    color: #1F4E79;
-    margin-bottom: 16px;
-  }
-  .pin-input:focus { border-color: #2E75B6; }
-  .btn-entrar {
-    width: 100%;
-    padding: 13px;
-    background: #1F4E79;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    font-size: 15px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: background 0.2s;
-  }
-  .btn-entrar:hover { background: #2E75B6; }
-  .pin-error {
-    color: #C00000;
-    font-size: 13px;
-    margin-top: 10px;
-    display: none;
-  }
-
-  /* ── PERFIL ── */
-  #pantalla-perfil { display: none; max-width: 420px; margin: 0 auto; padding-bottom: 32px; }
-
-  .header-band {
-    background: #1F4E79;
-    padding: 20px 20px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-  }
-  .avatar {
-    width: 64px; height: 64px;
-    border-radius: 50%;
-    object-fit: cover;
-    border: 3px solid #BDD7EE;
-    background: #2E75B6;
-    flex-shrink: 0;
-  }
-  .avatar-fallback {
-    width: 64px; height: 64px;
-    border-radius: 50%;
-    background: #2E75B6;
-    border: 3px solid #BDD7EE;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; font-weight: bold; color: white;
-    flex-shrink: 0;
-  }
-  .header-info { flex: 1; }
-  .header-info h1 { font-size: 16px; font-weight: bold; color: white; margin-bottom: 3px; }
-  .header-info p  { font-size: 13px; color: #BDD7EE; }
-  .header-id { font-size: 11px; color: #9DC3E6; margin-top: 4px; }
-
-  .info-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    padding: 14px;
-    background: #EAF2FB;
-  }
-  .info-box {
-    background: white;
-    border-radius: 10px;
-    padding: 10px 12px;
-    border: 1px solid #BDD7EE;
-  }
-  .info-box label { font-size: 11px; color: #666; display: block; margin-bottom: 2px; }
-  .info-box span  { font-size: 13px; font-weight: bold; color: #1F4E79; }
-
-  .seccion { padding: 0 14px 6px; }
-  .seccion-titulo {
-    font-size: 11px;
-    font-weight: bold;
-    color: #888;
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    padding: 14px 0 8px;
-    border-bottom: 1px solid #e0e0e0;
-    margin-bottom: 10px;
-  }
-
-  .riesgos-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
-  .riesgo-tag {
-    background: #FFF2CC;
-    color: #7F5B00;
-    font-size: 12px;
-    padding: 5px 11px;
-    border-radius: 20px;
-    border: 1px solid #FFD966;
-    font-weight: bold;
-  }
-
-  /* ── TABS ── */
-  .tabs {
-    display: flex;
-    background: white;
-    border-bottom: 2px solid #BDD7EE;
-    margin: 14px 0 0;
-    position: sticky;
-    top: 0;
-    z-index: 10;
-  }
-  .tab {
-    flex: 1;
-    text-align: center;
-    padding: 11px 4px;
-    font-size: 12px;
-    color: #888;
-    cursor: pointer;
-    border-bottom: 3px solid transparent;
-    margin-bottom: -2px;
-    font-weight: bold;
-    transition: all 0.2s;
-  }
-  .tab.activa { color: #1F4E79; border-bottom-color: #1F4E79; }
-
-  .tab-content { display: none; padding: 4px 14px 8px; }
-  .tab-content.activa { display: block; }
-
-  /* ── DOCUMENTO ITEM ── */
-  .doc-item {
-    background: white;
-    border-radius: 10px;
-    padding: 12px 14px;
-    margin-bottom: 8px;
-    border: 1px solid #e0e0e0;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-  }
-  .doc-info { flex: 1; min-width: 0; }
-  .doc-tipo { font-size: 10px; color: #888; margin-bottom: 2px; text-transform: uppercase; letter-spacing: 0.03em; }
-  .doc-nombre { font-size: 13px; font-weight: bold; color: #1F4E79; margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .doc-fecha { font-size: 11px; color: #888; }
-  .doc-derecha { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
-
-  .badge {
-    font-size: 11px;
-    font-weight: bold;
-    padding: 3px 10px;
-    border-radius: 20px;
-    white-space: nowrap;
-  }
-  .badge-VIGENTE    { background: #E2EFDA; color: #375623; border: 1px solid #A9D18E; }
-  .badge-POR-VENCER { background: #FFF2CC; color: #7F5B00; border: 1px solid #FFD966; }
-  .badge-VENCIDO    { background: #FCE4D6; color: #833C00; border: 1px solid #F4B183; }
-
-  .btn-pdf {
-    font-size: 11px;
-    color: #1F4E79;
-    background: #DEEAF1;
-    border: 1px solid #BDD7EE;
-    border-radius: 6px;
-    padding: 4px 10px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background 0.2s;
-  }
-  .btn-pdf:hover { background: #BDD7EE; }
-
-  /* ── VISOR PDF ── */
-  #visor-pdf {
-    display: none;
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 1000;
-    flex-direction: column;
-  }
-  .visor-header {
-    background: #1F4E79;
-    padding: 12px 16px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .visor-header span { color: white; font-size: 14px; font-weight: bold; }
-  .btn-cerrar {
-    background: rgba(255,255,255,0.2);
-    color: white;
-    border: none;
-    border-radius: 6px;
-    padding: 6px 14px;
-    font-size: 13px;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  #iframe-pdf {
-    flex: 1;
-    border: none;
-    width: 100%;
-  }
-
-  /* ── CERRAR SESIÓN ── */
-  .btn-salir {
-    display: block;
-    margin: 16px 14px 0;
-    padding: 11px;
-    background: white;
-    color: #888;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    font-size: 13px;
-    text-align: center;
-    cursor: pointer;
-    font-weight: bold;
-  }
-  .btn-salir:hover { background: #f5f5f5; }
-
-  .sin-datos { text-align: center; color: #aaa; font-size: 13px; padding: 20px 0; }
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:Arial,sans-serif;background:#f0f4f8;min-height:100vh;}
+#pantalla-pin{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:#f0f4f8;}
+.pin-card{background:white;border-radius:16px;padding:32px 28px;width:100%;max-width:340px;box-shadow:0 2px 16px rgba(0,0,0,0.10);text-align:center;}
+.logo-band{background:#1F4E79;color:white;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:bold;letter-spacing:1px;margin-bottom:20px;display:inline-block;}
+.pin-card h2{font-size:17px;color:#1F4E79;margin-bottom:6px;}
+.pin-card p{font-size:13px;color:#666;margin-bottom:22px;}
+.pin-input{width:100%;padding:12px;font-size:22px;text-align:center;letter-spacing:8px;border:2px solid #BDD7EE;border-radius:10px;outline:none;color:#1F4E79;margin-bottom:16px;}
+.pin-input:focus{border-color:#2E75B6;}
+.btn-entrar{width:100%;padding:13px;background:#1F4E79;color:white;border:none;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer;}
+.btn-entrar:hover{background:#2E75B6;}
+.pin-error{color:#C00000;font-size:13px;margin-top:10px;display:none;}
+#pantalla-perfil{display:none;max-width:420px;margin:0 auto;padding-bottom:32px;}
+.header-band{background:#1F4E79;padding:20px 20px 24px;display:flex;align-items:center;gap:16px;}
+.avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #BDD7EE;background:#2E75B6;flex-shrink:0;}
+.avatar-fallback{width:64px;height:64px;border-radius:50%;background:#2E75B6;border:3px solid #BDD7EE;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:white;flex-shrink:0;}
+.header-info{flex:1;}.header-info h1{font-size:16px;font-weight:bold;color:white;margin-bottom:3px;}.header-info p{font-size:13px;color:#BDD7EE;}.header-id{font-size:11px;color:#9DC3E6;margin-top:4px;}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;background:#EAF2FB;}
+.info-box{background:white;border-radius:10px;padding:10px 12px;border:1px solid #BDD7EE;}
+.info-box label{font-size:11px;color:#666;display:block;margin-bottom:2px;}.info-box span{font-size:13px;font-weight:bold;color:#1F4E79;}
+.seccion{padding:0 14px 6px;}.seccion-titulo{font-size:11px;font-weight:bold;color:#888;text-transform:uppercase;letter-spacing:0.05em;padding:14px 0 8px;border-bottom:1px solid #e0e0e0;margin-bottom:10px;}
+.riesgos-wrap{display:flex;flex-wrap:wrap;gap:6px;}
+.riesgo-tag{background:#FFF2CC;color:#7F5B00;font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid #FFD966;font-weight:bold;}
+.tabs{display:flex;background:white;border-bottom:2px solid #BDD7EE;margin:14px 0 0;position:sticky;top:0;z-index:10;}
+.tab{flex:1;text-align:center;padding:11px 4px;font-size:12px;color:#888;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;font-weight:bold;}
+.tab.activa{color:#1F4E79;border-bottom-color:#1F4E79;}
+.tab-content{display:none;padding:4px 14px 8px;}.tab-content.activa{display:block;}
+.doc-item{background:white;border-radius:10px;padding:12px 14px;margin-bottom:8px;border:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;gap:10px;}
+.doc-info{flex:1;min-width:0;}.doc-tipo{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase;}.doc-nombre{font-size:13px;font-weight:bold;color:#1F4E79;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.doc-fecha{font-size:11px;color:#888;}
+.doc-derecha{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
+.badge{font-size:11px;font-weight:bold;padding:3px 10px;border-radius:20px;white-space:nowrap;}
+.badge-VIGENTE{background:#E2EFDA;color:#375623;border:1px solid #A9D18E;}
+.badge-POR-VENCER{background:#FFF2CC;color:#7F5B00;border:1px solid #FFD966;}
+.badge-VENCIDO{background:#FCE4D6;color:#833C00;border:1px solid #F4B183;}
+.btn-pdf{font-size:11px;color:#1F4E79;background:#DEEAF1;border:1px solid #BDD7EE;border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:bold;}
+#visor-pdf{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;flex-direction:column;}
+.visor-header{background:#1F4E79;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
+.visor-header span{color:white;font-size:14px;font-weight:bold;}
+.btn-cerrar{background:rgba(255,255,255,0.2);color:white;border:none;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:bold;}
+#iframe-pdf{flex:1;border:none;width:100%;}
+.btn-salir{display:block;margin:16px 14px 0;padding:11px;background:white;color:#888;border:1px solid #ddd;border-radius:10px;font-size:13px;text-align:center;cursor:pointer;font-weight:bold;}
+.sin-datos{text-align:center;color:#aaa;font-size:13px;padding:20px 0;}
 </style>
 </head>
 <body>
-
-<!-- ═══════════════════════════════════════════ PANTALLA PIN -->
 <div id="pantalla-pin">
   <div class="pin-card">
     <div class="logo-band">VOLCÁN · PLANTA ÓXIDOS</div>
     <h2>Control Documental</h2>
     <p>Ingresa tu PIN para continuar</p>
-    <input class="pin-input" type="password" id="input-pin" maxlength="6"
-           placeholder="••••" onkeydown="if(event.key==='Enter') verificarPin()">
+    <input class="pin-input" type="password" id="input-pin" maxlength="6" placeholder="••••" onkeydown="if(event.key==='Enter') verificarPin()">
     <button class="btn-entrar" onclick="verificarPin()">Ingresar</button>
     <p class="pin-error" id="pin-error">PIN incorrecto. Intenta nuevamente.</p>
   </div>
 </div>
-
-<!-- ═══════════════════════════════════════════ PANTALLA PERFIL -->
 <div id="pantalla-perfil">
-
   <div class="header-band">
     <div id="avatar-container"></div>
     <div class="header-info">
@@ -292,41 +134,25 @@
       <p class="header-id" id="op-id"></p>
     </div>
   </div>
-
   <div class="info-grid">
-    <div class="info-box">
-      <label>Área</label>
-      <span id="op-area"></span>
-    </div>
-    <div class="info-box">
-      <label>Años en empresa</label>
-      <span id="op-antiguedad"></span>
-    </div>
-    <div class="info-box" style="grid-column:1/-1">
-      <label>Tiempo en el puesto</label>
-      <span id="op-puesto"></span>
-    </div>
+    <div class="info-box"><label>Área</label><span id="op-area"></span></div>
+    <div class="info-box"><label>Años en empresa</label><span id="op-antiguedad"></span></div>
+    <div class="info-box" style="grid-column:1/-1"><label>Tiempo en el puesto</label><span id="op-puesto"></span></div>
   </div>
-
   <div class="seccion">
     <div class="seccion-titulo">⚠ Riesgos críticos del área</div>
     <div class="riesgos-wrap" id="op-riesgos"></div>
   </div>
-
   <div class="tabs">
     <div class="tab activa" onclick="cambiarTab(0)">Capacitaciones</div>
-    <div class="tab"        onclick="cambiarTab(1)">Certificaciones</div>
-    <div class="tab"        onclick="cambiarTab(2)">Médico / EPP</div>
+    <div class="tab" onclick="cambiarTab(1)">Certificaciones</div>
+    <div class="tab" onclick="cambiarTab(2)">Médico / EPP</div>
   </div>
-
   <div class="tab-content activa" id="tab-capacitaciones"></div>
-  <div class="tab-content"        id="tab-certificaciones"></div>
-  <div class="tab-content"        id="tab-medico"></div>
-
+  <div class="tab-content" id="tab-certificaciones"></div>
+  <div class="tab-content" id="tab-medico"></div>
   <button class="btn-salir" onclick="cerrarSesion()">Cerrar sesión</button>
 </div>
-
-<!-- ═══════════════════════════════════════════ VISOR PDF -->
 <div id="visor-pdf">
   <div class="visor-header">
     <span id="visor-titulo">Documento</span>
@@ -334,147 +160,64 @@
   </div>
   <iframe id="iframe-pdf" allowfullscreen></iframe>
 </div>
-
 <script>
-  // Lee el ID del operador desde la URL (?id=OP-00100)
-  const params = new URLSearchParams(window.location.search);
-  const idURL  = params.get("id");
-
-  let rolActual = null;
-  let idActual  = null;
-
-  function verificarPin() {
-    const pin = document.getElementById("input-pin").value.trim();
-    const encontrado = PINES[pin];
-    const error = document.getElementById("pin-error");
-
-    if (!encontrado) {
-      error.style.display = "block";
-      document.getElementById("input-pin").value = "";
-      return;
-    }
-    error.style.display = "none";
-    rolActual = encontrado.rol;
-
-    if (encontrado.rol === "operador") {
-      // El operador solo puede ver su propio perfil
-      if (!idURL || encontrado.id !== idURL) {
-        error.textContent = "No tienes permiso para ver este perfil.";
-        error.style.display = "block";
-        document.getElementById("input-pin").value = "";
-        return;
-      }
-      idActual = encontrado.id;
-    } else {
-      // Supervisor o maestro: ve al operador del QR
-      if (!idURL) {
-        error.textContent = "QR inválido. No se encontró el operador.";
-        error.style.display = "block";
-        return;
-      }
-      idActual = idURL;
-    }
-
-    mostrarPerfil(idActual);
+const params=new URLSearchParams(window.location.search);
+const idURL=params.get("id");
+let rolActual=null,idActual=null;
+function verificarPin(){
+  const pin=document.getElementById("input-pin").value.trim();
+  const encontrado=PINES[pin];
+  const error=document.getElementById("pin-error");
+  if(!encontrado){error.textContent="PIN incorrecto. Intenta nuevamente.";error.style.display="block";document.getElementById("input-pin").value="";return;}
+  error.style.display="none";
+  rolActual=encontrado.rol;
+  if(encontrado.rol==="operador"){
+    if(!idURL||encontrado.id!==idURL){error.textContent="No tienes permiso para ver este perfil.";error.style.display="block";document.getElementById("input-pin").value="";return;}
+    idActual=encontrado.id;
+  } else {
+    if(!idURL){error.textContent="QR inválido. No se encontró el operador.";error.style.display="block";return;}
+    idActual=idURL;
   }
-
-  function mostrarPerfil(id) {
-    const op = OPERADORES.find(o => o.id === id);
-    if (!op) {
-      document.getElementById("pin-error").textContent = "Operador no encontrado.";
-      document.getElementById("pin-error").style.display = "block";
-      return;
-    }
-
-    // Iniciales para fallback
-    const partes = op.nombre.split(" ");
-    const iniciales = (partes[1]?.[0] || "") + (partes[0]?.[0] || "");
-
-    // Avatar
-    const avatarContainer = document.getElementById("avatar-container");
-    const img = document.createElement("img");
-    img.className = "avatar";
-    img.src = driveDirecto(op.foto);
-    img.alt = op.nombre;
-    img.onerror = function() {
-      avatarContainer.innerHTML = `<div class="avatar-fallback">${iniciales.toUpperCase()}</div>`;
-    };
-    avatarContainer.appendChild(img);
-
-    document.getElementById("op-nombre").textContent = op.nombre;
-    document.getElementById("op-cargo").textContent  = op.cargo;
-    document.getElementById("op-id").textContent     = op.id;
-    document.getElementById("op-area").textContent   = op.area;
-    document.getElementById("op-antiguedad").textContent = tiempoDesde(op.fechaIngresoEmpresa);
-    document.getElementById("op-puesto").textContent     = tiempoDesde(op.fechaIngresoPuesto);
-
-    // Riesgos
-    const riesgosEl = document.getElementById("op-riesgos");
-    op.riesgos.forEach(r => {
-      const tag = document.createElement("span");
-      tag.className = "riesgo-tag";
-      tag.textContent = r;
-      riesgosEl.appendChild(tag);
-    });
-
-    // Documentos — separar por tipo
-    const caps  = op.documentos.filter(d => d.tipo === "Capacitación");
-    const certs = op.documentos.filter(d => d.tipo === "Certificación");
-
-    renderDocs("tab-capacitaciones",  caps);
-    renderDocs("tab-certificaciones", certs);
-    renderDocs("tab-medico",          op.medico_epp);
-
-    document.getElementById("pantalla-pin").style.display    = "none";
-    document.getElementById("pantalla-perfil").style.display = "block";
-  }
-
-  function renderDocs(contenedorId, docs) {
-    const el = document.getElementById(contenedorId);
-    if (!docs || docs.length === 0) {
-      el.innerHTML = '<p class="sin-datos">Sin documentos registrados</p>';
-      return;
-    }
-    docs.forEach(doc => {
-      const badgeClass = "badge-" + doc.estado.replace(/ /g, "-");
-      const div = document.createElement("div");
-      div.className = "doc-item";
-      div.innerHTML = `
-        <div class="doc-info">
-          <div class="doc-tipo">${doc.tipo || ""}</div>
-          <div class="doc-nombre">${doc.nombre}</div>
-          <div class="doc-fecha">Vence: ${doc.vencimiento}</div>
-        </div>
-        <div class="doc-derecha">
-          <span class="badge ${badgeClass}">${doc.estado}</span>
-          ${doc.pdf ? `<button class="btn-pdf" onclick="abrirPDF('${drivePreview(doc.pdf)}','${doc.nombre}')">Ver PDF</button>` : ""}
-        </div>
-      `;
-      el.appendChild(div);
-    });
-  }
-
-  function cambiarTab(idx) {
-    const tabs     = document.querySelectorAll(".tab");
-    const contents = document.querySelectorAll(".tab-content");
-    tabs.forEach((t, i)     => t.classList.toggle("activa", i === idx));
-    contents.forEach((c, i) => c.classList.toggle("activa", i === idx));
-  }
-
-  function abrirPDF(url, titulo) {
-    document.getElementById("visor-titulo").textContent = titulo;
-    document.getElementById("iframe-pdf").src = url;
-    document.getElementById("visor-pdf").style.display = "flex";
-  }
-
-  function cerrarPDF() {
-    document.getElementById("visor-pdf").style.display = "none";
-    document.getElementById("iframe-pdf").src = "";
-  }
-
-  function cerrarSesion() {
-    location.reload();
-  }
+  mostrarPerfil(idActual);
+}
+function mostrarPerfil(id){
+  const op=OPERADORES.find(o=>o.id===id);
+  if(!op){document.getElementById("pin-error").textContent="Operador no encontrado.";document.getElementById("pin-error").style.display="block";return;}
+  const partes=op.nombre.split(" ");
+  const iniciales=(partes[1]?.[0]||"")+(partes[0]?.[0]||"");
+  const avatarContainer=document.getElementById("avatar-container");
+  const img=document.createElement("img");
+  img.className="avatar";img.src=driveDirecto(op.foto);img.alt=op.nombre;
+  img.onerror=function(){avatarContainer.innerHTML=`<div class="avatar-fallback">${iniciales.toUpperCase()}</div>`;};
+  avatarContainer.appendChild(img);
+  document.getElementById("op-nombre").textContent=op.nombre;
+  document.getElementById("op-cargo").textContent=op.cargo;
+  document.getElementById("op-id").textContent=op.id;
+  document.getElementById("op-area").textContent=op.area;
+  document.getElementById("op-antiguedad").textContent=tiempoDesde(op.fechaIngresoEmpresa);
+  document.getElementById("op-puesto").textContent=tiempoDesde(op.fechaIngresoPuesto);
+  const riesgosEl=document.getElementById("op-riesgos");
+  op.riesgos.forEach(r=>{const tag=document.createElement("span");tag.className="riesgo-tag";tag.textContent=r;riesgosEl.appendChild(tag);});
+  renderDocs("tab-capacitaciones",op.documentos.filter(d=>d.tipo==="Capacitación"));
+  renderDocs("tab-certificaciones",op.documentos.filter(d=>d.tipo==="Certificación"));
+  renderDocs("tab-medico",op.medico_epp);
+  document.getElementById("pantalla-pin").style.display="none";
+  document.getElementById("pantalla-perfil").style.display="block";
+}
+function renderDocs(cId,docs){
+  const el=document.getElementById(cId);
+  if(!docs||docs.length===0){el.innerHTML='<p class="sin-datos">Sin documentos registrados</p>';return;}
+  docs.forEach(doc=>{
+    const bc="badge-"+doc.estado.replace(/ /g,"-");
+    const div=document.createElement("div");div.className="doc-item";
+    div.innerHTML=`<div class="doc-info"><div class="doc-tipo">${doc.tipo||""}</div><div class="doc-nombre">${doc.nombre}</div><div class="doc-fecha">Vence: ${doc.vencimiento}</div></div><div class="doc-derecha"><span class="badge ${bc}">${doc.estado}</span>${doc.pdf?`<button class="btn-pdf" onclick="abrirPDF('${drivePreview(doc.pdf)}','${doc.nombre}')">Ver PDF</button>`:""}</div>`;
+    el.appendChild(div);
+  });
+}
+function cambiarTab(idx){document.querySelectorAll(".tab").forEach((t,i)=>t.classList.toggle("activa",i===idx));document.querySelectorAll(".tab-content").forEach((c,i)=>c.classList.toggle("activa",i===idx));}
+function abrirPDF(url,titulo){document.getElementById("visor-titulo").textContent=titulo;document.getElementById("iframe-pdf").src=url;document.getElementById("visor-pdf").style.display="flex";}
+function cerrarPDF(){document.getElementById("visor-pdf").style.display="none";document.getElementById("iframe-pdf").src="";}
+function cerrarSesion(){location.reload();}
 </script>
 </body>
 </html>
