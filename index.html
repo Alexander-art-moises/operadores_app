@@ -1,223 +1,853 @@
+
 <!DOCTYPE html>
+<!-- ═══════════════════════════════════════════════════════════════
+     VOLCÁN · PLANTA ÓXIDOS — Control Documental de Operadores
+     Archivo: index.html
+     Para hacer cambios: lee los comentarios que empiezan con →
+═══════════════════════════════════════════════════════════════ -->
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- ─────────────────────────────────────────────────────────────
+     → CAMBIO 01: Texto de la pestaña del navegador
+     Cambia el texto entre <title> y </title>
+──────────────────────────────────────────────────────────────── -->
 <title>Volcán · Planta Óxidos</title>
+
 <script>
+/* ═══════════════════════════════════════════════════════════════
+   → CAMBIO 02: PINES DE ACCESO
+   Cambia los números entre comillas por los PINes que quieras.
+   REGLAS:
+   - Siempre entre comillas: "1234" no 1234
+   - El rol "maestro" y "supervisor" ven a cualquier operador
+   - El rol "operador" solo ve su propio perfil
+   - El id del operador DEBE coincidir con el id en OPERADORES
+═══════════════════════════════════════════════════════════════ */
 const PINES = {
-  "0000": { rol: "maestro" },
-  "1111": { rol: "supervisor" },
-  "2201": { rol: "operador", id: "OP-00100" },
-  "2202": { rol: "operador", id: "OP-00200" },
-  "2203": { rol: "operador", id: "OP-00300" },
+  "0000": { rol: "maestro" },                        /* → PIN maestro (para ti) */
+  "1111": { rol: "supervisor" },                     /* → PIN supervisores */
+  "2201": { rol: "operador", id: "OP-00100" },       /* → PIN Juan Pérez */
+  "2202": { rol: "operador", id: "OP-00200" },       /* → PIN María García */
+  "2203": { rol: "operador", id: "OP-00300" },       /* → PIN Carlos Rodríguez */
+  /* → PARA AGREGAR UN OPERADOR NUEVO copia esta línea y cambia los datos:
+     "2204": { rol: "operador", id: "OP-00400" },    */
 };
+
+/* ═══════════════════════════════════════════════════════════════
+   → CAMBIO 03: DATOS DE OPERADORES
+   Cada operador es un bloque que empieza con { y termina con },
+   REGLAS IMPORTANTES:
+   - fechas: siempre DD/MM/AAAA
+   - tipo: solo "Capacitación" o "Certificación"
+   - estado: solo "VIGENTE", "POR VENCER" o "VENCIDO"
+   - foto y pdf: links de Google Drive en modo público
+═══════════════════════════════════════════════════════════════ */
 const OPERADORES = [
+
+  /* ─── OPERADOR 1 ──────────────────────────────────────────── */
   {
-    id: "OP-00100",
-    nombre: "Pérez Quispe, Juan Carlos",
-    area: "Chancado",
-    cargo: "Operador de Chancado",
-    fechaIngresoEmpresa: "01/03/2019",
-    fechaIngresoPuesto: "15/06/2022",
-    foto: "https://drive.google.com/file/d/1DC9-_-DbnWpZnKqY0KljF-SQgS9kEwH7/view?usp=sharing",
-    riesgos: ["Trabajo en altura","Equipos en movimiento","Manipulación de Cargas"],
-    documentos: [
-      { tipo:"Certificación", nombre:"Trabajo en altura", emision:"10/01/2023", vencimiento:"10/01/2025", estado:"VENCIDO", pdf:"https://drive.google.com/file/d/1gN0q0P61JnsoJXfoYWjCl0OwXp7JVoQ1/view?usp=sharing" },
-      { tipo:"Capacitación", nombre:"Equipos en movimiento", emision:"05/03/2024", vencimiento:"05/03/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1xFNjBN7fTkgaCvlm-z0fKeOOVDYchFoG/view?usp=sharing" },
-      { tipo:"Capacitación", nombre:"Manipulación de Cargas", emision:"15/10/2024", vencimiento:"15/04/2025", estado:"POR VENCER", pdf:"https://drive.google.com/file/d/19wnkKp7I60kyw3QX3-_DFiLMeXESMIWk/view?usp=sharing" },
+    id: "OP-00100",                                  /* → Código único, no repetir */
+    nombre: "Pérez Quispe, Juan Carlos",             /* → Apellidos, Nombres */
+    area: "Chancado",                                /* → Área de trabajo */
+    cargo: "Operador de Chancado",                   /* → Cargo exacto */
+    fechaIngresoEmpresa: "01/03/2019",               /* → Fecha ingreso empresa DD/MM/AAAA */
+    fechaIngresoPuesto:  "15/06/2022",               /* → Fecha ingreso al puesto DD/MM/AAAA */
+    foto: "https://drive.google.com/file/d/1DC9-_-DbnWpZnKqY0KljF-SQgS9kEwH7/view?usp=sharing", /* → Link Drive de la foto */
+
+    /* → RIESGOS: lista entre [ ] separados por comas */
+    riesgos: [
+      "Trabajo en altura",
+      "Equipos en movimiento",
+      "Manipulación de Cargas",
+      /* → Agrega más riesgos aquí si es necesario */
     ],
+
+    /* → DOCUMENTOS: cada uno es un bloque { } separado por coma
+         tipo:        "Capacitación" o "Certificación"
+         nombre:      nombre del documento
+         emision:     fecha de emisión DD/MM/AAAA
+         vencimiento: fecha de vencimiento DD/MM/AAAA
+         estado:      "VIGENTE", "POR VENCER" o "VENCIDO"
+         pdf:         link de Google Drive del PDF          */
+    documentos: [
+      {
+        tipo:        "Certificación",
+        nombre:      "Trabajo en altura",
+        emision:     "10/01/2023",
+        vencimiento: "10/01/2025",
+        estado:      "VENCIDO",
+        pdf:         "https://drive.google.com/file/d/1gN0q0P61JnsoJXfoYWjCl0OwXp7JVoQ1/view?usp=sharing",
+      },
+      {
+        tipo:        "Capacitación",
+        nombre:      "Equipos en movimiento",
+        emision:     "05/03/2024",
+        vencimiento: "05/03/2026",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/file/d/1xFNjBN7fTkgaCvlm-z0fKeOOVDYchFoG/view?usp=sharing",
+      },
+      {
+        tipo:        "Capacitación",
+        nombre:      "Manipulación de Cargas",
+        emision:     "15/10/2024",
+        vencimiento: "15/04/2025",
+        estado:      "POR VENCER",
+        pdf:         "https://drive.google.com/file/d/19wnkKp7I60kyw3QX3-_DFiLMeXESMIWk/view?usp=sharing",
+      },
+      /* → PARA AGREGAR UN DOCUMENTO NUEVO copia este bloque:
+      {
+        tipo:        "Capacitación",
+        nombre:      "NOMBRE DEL CURSO",
+        emision:     "DD/MM/AAAA",
+        vencimiento: "DD/MM/AAAA",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/...",
+      },
+      */
+    ],
+
+    /* → MÉDICO Y EPP: misma estructura que documentos */
     medico_epp: [
-      { tipo:"Examen Médico", nombre:"Examen Ocupacional Anual", emision:"01/06/2024", vencimiento:"01/06/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing" },
+      {
+        tipo:        "Examen Médico",
+        nombre:      "Examen Ocupacional Anual",
+        emision:     "01/06/2024",
+        vencimiento: "01/06/2026",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing",
+      },
     ],
   },
+  /* ─── FIN OPERADOR 1 ──────────────────────────────────────── */
+
+  /* ─── OPERADOR 2 ──────────────────────────────────────────── */
   {
     id: "OP-00200",
     nombre: "García Torres, María Elena",
     area: "Molienda",
     cargo: "Operadora de Molienda",
     fechaIngresoEmpresa: "10/07/2020",
-    fechaIngresoPuesto: "10/07/2020",
+    fechaIngresoPuesto:  "10/07/2020",
     foto: "https://drive.google.com/file/d/1QhsIgQrtBqFJ_7d3W6aJml_-eMAj0iEY/view?usp=sharing",
-    riesgos: ["Riesgo eléctrico","Trabajo en espacios confinados"],
+    riesgos: [
+      "Riesgo eléctrico",
+      "Trabajo en espacios confinados",
+    ],
     documentos: [
-      { tipo:"Certificación", nombre:"Riesgo eléctrico", emision:"20/06/2024", vencimiento:"20/06/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1FA_OKghXi-_rcDofBavcziQB9FMwOM9H/view?usp=sharing" },
-      { tipo:"Capacitación", nombre:"Trabajo en espacios confinados", emision:"01/11/2023", vencimiento:"01/11/2025", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1Q8R6aZcNm71giE2dgoSwfAzyxxsR3WoT/view?usp=sharing" },
+      {
+        tipo:        "Certificación",
+        nombre:      "Riesgo eléctrico",
+        emision:     "20/06/2024",
+        vencimiento: "20/06/2026",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/file/d/1FA_OKghXi-_rcDofBavcziQB9FMwOM9H/view?usp=sharing",
+      },
+      {
+        tipo:        "Capacitación",
+        nombre:      "Trabajo en espacios confinados",
+        emision:     "01/11/2023",
+        vencimiento: "01/11/2025",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/file/d/1Q8R6aZcNm71giE2dgoSwfAzyxxsR3WoT/view?usp=sharing",
+      },
     ],
     medico_epp: [
-      { tipo:"Examen Médico", nombre:"Examen Ocupacional Anual", emision:"15/08/2024", vencimiento:"15/08/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing" },
+      {
+        tipo:        "Examen Médico",
+        nombre:      "Examen Ocupacional Anual",
+        emision:     "15/08/2024",
+        vencimiento: "15/08/2026",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing",
+      },
     ],
   },
+  /* ─── FIN OPERADOR 2 ──────────────────────────────────────── */
+
+  /* ─── OPERADOR 3 ──────────────────────────────────────────── */
   {
     id: "OP-00300",
     nombre: "Rodríguez Lima, Carlos A.",
     area: "Lixiviación",
     cargo: "Operador de Lixiviación",
     fechaIngresoEmpresa: "05/01/2018",
-    fechaIngresoPuesto: "01/03/2021",
+    fechaIngresoPuesto:  "01/03/2021",
     foto: "https://drive.google.com/file/d/1JIRM62dhmycSRZxfvQZ6CokBBHUA7i9m/view?usp=sharing",
-    riesgos: ["Manipulación de Sustancias Químicas","Caída de objetos"],
+    riesgos: [
+      "Manipulación de Sustancias Químicas",
+      "Caída de objetos",
+    ],
     documentos: [
-      { tipo:"Certificación", nombre:"Manipulación de Sustancias Químicas", emision:"12/04/2024", vencimiento:"12/04/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1PI3DCC7WMDosOy2dvex8X2Dpld9cr0Kr/view?usp=sharing" },
+      {
+        tipo:        "Certificación",
+        nombre:      "Manipulación de Sustancias Químicas",
+        emision:     "12/04/2024",
+        vencimiento: "12/04/2026",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/file/d/1PI3DCC7WMDosOy2dvex8X2Dpld9cr0Kr/view?usp=sharing",
+      },
     ],
     medico_epp: [
-      { tipo:"Examen Médico", nombre:"Examen Ocupacional Anual", emision:"01/02/2025", vencimiento:"01/02/2027", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing" },
+      {
+        tipo:        "Examen Médico",
+        nombre:      "Examen Ocupacional Anual",
+        emision:     "01/02/2025",
+        vencimiento: "01/02/2027",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing",
+      },
     ],
   },
-];
-function driveDirecto(url){const match=url.match(/\/d\/([a-zA-Z0-9_-]+)/);if(match)return`https://drive.google.com/thumbnail?id=${match[1]}&sz=w400`;return url;}
-function drivePreview(url){const match=url.match(/\/d\/([a-zA-Z0-9_-]+)/);if(match)return`https://drive.google.com/file/d/${match[1]}/preview`;return url;}
-function tiempoDesde(f){const[d,m,y]=f.split("/").map(Number);const desde=new Date(y,m-1,d);const hoy=new Date();let a=hoy.getFullYear()-desde.getFullYear();let ms=hoy.getMonth()-desde.getMonth();if(ms<0){a--;ms+=12;}if(a>0&&ms>0)return`${a} año${a>1?"s":""} ${ms} mes${ms>1?"es":""}`;if(a>0)return`${a} año${a>1?"s":""}`;return`${ms} mes${ms>1?"es":""}`;}
+  /* ─── FIN OPERADOR 3 ──────────────────────────────────────── */
+
+  /* ─── OPERADOR 4 (PLANTILLA — copia y rellena) ────────────────
+  {
+    id: "OP-00400",
+    nombre: "Apellidos, Nombres",
+    area: "Nombre del Área",
+    cargo: "Cargo del Operador",
+    fechaIngresoEmpresa: "DD/MM/AAAA",
+    fechaIngresoPuesto:  "DD/MM/AAAA",
+    foto: "https://drive.google.com/file/d/ID_FOTO/view?usp=sharing",
+    riesgos: [
+      "Riesgo 1",
+      "Riesgo 2",
+    ],
+    documentos: [
+      {
+        tipo:        "Capacitación",
+        nombre:      "Nombre del documento",
+        emision:     "DD/MM/AAAA",
+        vencimiento: "DD/MM/AAAA",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/file/d/ID_PDF/view?usp=sharing",
+      },
+    ],
+    medico_epp: [
+      {
+        tipo:        "Examen Médico",
+        nombre:      "Examen Ocupacional Anual",
+        emision:     "DD/MM/AAAA",
+        vencimiento: "DD/MM/AAAA",
+        estado:      "VIGENTE",
+        pdf:         "https://drive.google.com/file/d/ID_PDF/view?usp=sharing",
+      },
+    ],
+  },
+  ──────────────────────────────────────────────────────────── */
+
+]; /* ← Este corchete y punto y coma cierran la lista OPERADORES. NUNCA lo borres */
+
+
+/* ═══════════════════════════════════════════════════════════════
+   FUNCIONES DE APOYO — NO TOCAR
+   Estas funciones convierten links de Drive y calculan tiempos.
+═══════════════════════════════════════════════════════════════ */
+
+/* Convierte link de Drive en imagen visible */
+function driveDirecto(url) {
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w400`;
+  return url;
+}
+
+/* Convierte link de Drive en preview de PDF */
+function drivePreview(url) {
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match) return `https://drive.google.com/file/d/${match[1]}/preview`;
+  return url;
+}
+
+/* Calcula tiempo transcurrido desde una fecha hasta hoy */
+function tiempoDesde(f) {
+  const [d,m,y] = f.split("/").map(Number);
+  const desde = new Date(y, m-1, d);
+  const hoy = new Date();
+  let a = hoy.getFullYear() - desde.getFullYear();
+  let ms = hoy.getMonth() - desde.getMonth();
+  if (ms < 0) { a--; ms += 12; }
+  if (a > 0 && ms > 0) return `${a} año${a>1?"s":""} ${ms} mes${ms>1?"es":""}`;
+  if (a > 0) return `${a} año${a>1?"s":""}`;
+  return `${ms} mes${ms>1?"es":""}`;
+}
 </script>
+
 <style>
-*{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:Arial,sans-serif;background:#f0f4f8;min-height:100vh;}
-#pantalla-pin{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;background:#f0f4f8;}
-.pin-card{background:white;border-radius:16px;padding:32px 28px;width:100%;max-width:340px;box-shadow:0 2px 16px rgba(0,0,0,0.10);text-align:center;}
-.logo-band{background:#1F4E79;color:white;border-radius:10px;padding:10px 18px;font-size:15px;font-weight:bold;letter-spacing:1px;margin-bottom:20px;display:inline-block;}
-.pin-card h2{font-size:17px;color:#1F4E79;margin-bottom:6px;}
-.pin-card p{font-size:13px;color:#666;margin-bottom:22px;}
-.pin-input{width:100%;padding:12px;font-size:22px;text-align:center;letter-spacing:8px;border:2px solid #BDD7EE;border-radius:10px;outline:none;color:#1F4E79;margin-bottom:16px;}
-.pin-input:focus{border-color:#2E75B6;}
-.btn-entrar{width:100%;padding:13px;background:#1F4E79;color:white;border:none;border-radius:10px;font-size:15px;font-weight:bold;cursor:pointer;}
-.btn-entrar:hover{background:#2E75B6;}
-.pin-error{color:#C00000;font-size:13px;margin-top:10px;display:none;}
-#pantalla-perfil{display:none;max-width:420px;margin:0 auto;padding-bottom:32px;}
-.header-band{background:#1F4E79;padding:20px 20px 24px;display:flex;align-items:center;gap:16px;}
-.avatar{width:64px;height:64px;border-radius:50%;object-fit:cover;border:3px solid #BDD7EE;background:#2E75B6;flex-shrink:0;}
-.avatar-fallback{width:64px;height:64px;border-radius:50%;background:#2E75B6;border:3px solid #BDD7EE;display:flex;align-items:center;justify-content:center;font-size:22px;font-weight:bold;color:white;flex-shrink:0;}
-.header-info{flex:1;}.header-info h1{font-size:16px;font-weight:bold;color:white;margin-bottom:3px;}.header-info p{font-size:13px;color:#BDD7EE;}.header-id{font-size:11px;color:#9DC3E6;margin-top:4px;}
-.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:14px;background:#EAF2FB;}
-.info-box{background:white;border-radius:10px;padding:10px 12px;border:1px solid #BDD7EE;}
-.info-box label{font-size:11px;color:#666;display:block;margin-bottom:2px;}.info-box span{font-size:13px;font-weight:bold;color:#1F4E79;}
-.seccion{padding:0 14px 6px;}.seccion-titulo{font-size:11px;font-weight:bold;color:#888;text-transform:uppercase;letter-spacing:0.05em;padding:14px 0 8px;border-bottom:1px solid #e0e0e0;margin-bottom:10px;}
-.riesgos-wrap{display:flex;flex-wrap:wrap;gap:6px;}
-.riesgo-tag{background:#FFF2CC;color:#7F5B00;font-size:12px;padding:5px 11px;border-radius:20px;border:1px solid #FFD966;font-weight:bold;}
-.tabs{display:flex;background:white;border-bottom:2px solid #BDD7EE;margin:14px 0 0;position:sticky;top:0;z-index:10;}
-.tab{flex:1;text-align:center;padding:11px 4px;font-size:12px;color:#888;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;font-weight:bold;}
-.tab.activa{color:#1F4E79;border-bottom-color:#1F4E79;}
-.tab-content{display:none;padding:4px 14px 8px;}.tab-content.activa{display:block;}
-.doc-item{background:white;border-radius:10px;padding:12px 14px;margin-bottom:8px;border:1px solid #e0e0e0;display:flex;align-items:center;justify-content:space-between;gap:10px;}
-.doc-info{flex:1;min-width:0;}.doc-tipo{font-size:10px;color:#888;margin-bottom:2px;text-transform:uppercase;}.doc-nombre{font-size:13px;font-weight:bold;color:#1F4E79;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.doc-fecha{font-size:11px;color:#888;}
-.doc-derecha{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex-shrink:0;}
-.badge{font-size:11px;font-weight:bold;padding:3px 10px;border-radius:20px;white-space:nowrap;}
-.badge-VIGENTE{background:#E2EFDA;color:#375623;border:1px solid #A9D18E;}
-.badge-POR-VENCER{background:#FFF2CC;color:#7F5B00;border:1px solid #FFD966;}
-.badge-VENCIDO{background:#FCE4D6;color:#833C00;border:1px solid #F4B183;}
-.btn-pdf{font-size:11px;color:#1F4E79;background:#DEEAF1;border:1px solid #BDD7EE;border-radius:6px;padding:4px 10px;cursor:pointer;font-weight:bold;}
-#visor-pdf{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.7);z-index:1000;flex-direction:column;}
-.visor-header{background:#1F4E79;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;}
-.visor-header span{color:white;font-size:14px;font-weight:bold;}
-.btn-cerrar{background:rgba(255,255,255,0.2);color:white;border:none;border-radius:6px;padding:6px 14px;font-size:13px;cursor:pointer;font-weight:bold;}
-#iframe-pdf{flex:1;border:none;width:100%;}
-.btn-salir{display:block;margin:16px 14px 0;padding:11px;background:white;color:#888;border:1px solid #ddd;border-radius:10px;font-size:13px;text-align:center;cursor:pointer;font-weight:bold;}
-.sin-datos{text-align:center;color:#aaa;font-size:13px;padding:20px 0;}
+/* ═══════════════════════════════════════════════════════════════
+   DISEÑO GENERAL
+═══════════════════════════════════════════════════════════════ */
+
+/* Elimina márgenes por defecto del navegador */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* → CAMBIO 04: Fuente y color de fondo general de la página */
+body {
+  font-family: Arial, sans-serif;  /* → Cambia la fuente aquí */
+  background: #f0f4f8;             /* → Cambia el fondo gris-azul aquí */
+  min-height: 100vh;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PANTALLA DE PIN
+═══════════════════════════════════════════════════════════════ */
+
+#pantalla-pin {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f0f4f8;             /* → Mismo fondo que body */
+}
+
+/* Tarjeta blanca del formulario de PIN */
+.pin-card {
+  background: white;
+  border-radius: 16px;             /* → Esquinas redondeadas */
+  padding: 32px 28px;
+  width: 100%;
+  max-width: 340px;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.10); /* → Sombra suave */
+  text-align: center;
+}
+
+/* → CAMBIO 05: Banda del logo "VOLCÁN · PLANTA ÓXIDOS" */
+.logo-band {
+  background: #1F4E79;             /* → Color de fondo de la banda del logo */
+  color: white;                    /* → Color del texto */
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-size: 15px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.pin-card h2 { font-size: 17px; color: #1F4E79; margin-bottom: 6px; }
+.pin-card p  { font-size: 13px; color: #666;    margin-bottom: 22px; }
+
+/* Campo donde se escribe el PIN */
+.pin-input {
+  width: 100%;
+  padding: 12px;
+  font-size: 22px;
+  text-align: center;
+  letter-spacing: 8px;
+  border: 2px solid #BDD7EE;
+  border-radius: 10px;
+  outline: none;
+  color: #1F4E79;
+  margin-bottom: 16px;
+}
+.pin-input:focus { border-color: #2E75B6; }
+
+/* → CAMBIO 06: Botón "Ingresar" */
+.btn-entrar {
+  width: 100%;
+  padding: 13px;
+  background: #1F4E79;             /* → Color del botón Ingresar */
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-size: 15px;
+  font-weight: bold;
+  cursor: pointer;
+}
+.btn-entrar:hover { background: #2E75B6; } /* → Color al pasar el mouse */
+
+/* Mensaje de error de PIN incorrecto */
+.pin-error { color: #C00000; font-size: 13px; margin-top: 10px; display: none; }
+
+
+/* ═══════════════════════════════════════════════════════════════
+   PANTALLA DE PERFIL DEL OPERADOR
+═══════════════════════════════════════════════════════════════ */
+
+/* Oculto por defecto, se muestra al ingresar el PIN */
+#pantalla-perfil { display: none; max-width: 420px; margin: 0 auto; padding-bottom: 32px; }
+
+/* → CAMBIO 07: Encabezado azul con foto y nombre del operador */
+.header-band {
+  background: #1F4E79;             /* → COLOR PRINCIPAL DEL ENCABEZADO */
+  padding: 20px 20px 24px;
+  display: flex;                   /* Pone foto y texto en fila */
+  align-items: center;             /* Los centra verticalmente */
+  gap: 16px;                       /* Espacio entre foto y texto */
+}
+
+/* Foto circular del operador */
+.avatar {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;              /* → 50% hace el cuadrado en círculo */
+  object-fit: cover;               /* Recorta la foto sin deformarla */
+  border: 3px solid #BDD7EE;       /* → Borde celeste alrededor de la foto */
+  background: #2E75B6;
+  flex-shrink: 0;
+}
+
+/* Iniciales cuando la foto no carga */
+.avatar-fallback {
+  width: 64px; height: 64px;
+  border-radius: 50%;
+  background: #2E75B6;
+  border: 3px solid #BDD7EE;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 22px; font-weight: bold; color: white;
+  flex-shrink: 0;
+}
+
+/* Texto del encabezado (nombre, cargo, ID) */
+.header-info { flex: 1; }
+.header-info h1 { font-size: 16px; font-weight: bold; color: white; margin-bottom: 3px; }
+.header-info p  { font-size: 13px; color: #BDD7EE; }
+.header-id      { font-size: 11px; color: #9DC3E6; margin-top: 4px; }
+
+/* → CAMBIO 08: Grilla de información (área, años, tiempo en puesto) */
+.info-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;  /* → 2 columnas iguales */
+  gap: 10px;
+  padding: 14px;
+  background: #EAF2FB;             /* → Fondo azul muy claro de la grilla */
+}
+
+/* Cada tarjetita de información */
+.info-box {
+  background: white;
+  border-radius: 10px;
+  padding: 10px 12px;
+  border: 1px solid #BDD7EE;
+}
+.info-box label { font-size: 11px; color: #666;    display: block; margin-bottom: 2px; }
+.info-box span  { font-size: 13px; font-weight: bold; color: #1F4E79; }
+
+/* Sección de riesgos */
+.seccion { padding: 0 14px 6px; }
+.seccion-titulo {
+  font-size: 11px; font-weight: bold; color: #888;
+  text-transform: uppercase; letter-spacing: 0.05em;
+  padding: 14px 0 8px;
+  border-bottom: 1px solid #e0e0e0;
+  margin-bottom: 10px;
+}
+
+/* Tags amarillos de riesgos */
+.riesgos-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
+
+/* → CAMBIO 09: Color de los tags de riesgos */
+.riesgo-tag {
+  background: #FFF2CC;             /* → Fondo amarillo claro */
+  color: #7F5B00;                  /* → Texto amarillo oscuro */
+  font-size: 12px;
+  padding: 5px 11px;
+  border-radius: 20px;
+  border: 1px solid #FFD966;
+  font-weight: bold;
+}
+
+/* ═══════════════════════════════════════════════════════════════
+   PESTAÑAS (Capacitaciones / Certificaciones / Médico-EPP)
+═══════════════════════════════════════════════════════════════ */
+
+.tabs {
+  display: flex;
+  background: white;
+  border-bottom: 2px solid #BDD7EE;
+  margin: 14px 0 0;
+  position: sticky;                /* Se queda fija al hacer scroll */
+  top: 0;
+  z-index: 10;
+}
+
+/* Cada pestaña */
+.tab {
+  flex: 1;
+  text-align: center;
+  padding: 11px 4px;
+  font-size: 12px;
+  color: #888;
+  cursor: pointer;
+  border-bottom: 3px solid transparent;
+  margin-bottom: -2px;
+  font-weight: bold;
+}
+
+/* → CAMBIO 10: Color de la pestaña activa */
+.tab.activa {
+  color: #1F4E79;                  /* → Color del texto de pestaña activa */
+  border-bottom-color: #1F4E79;    /* → Línea debajo de pestaña activa */
+}
+
+/* Contenido de cada pestaña */
+.tab-content { display: none; padding: 4px 14px 8px; }
+.tab-content.activa { display: block; }
+
+/* ═══════════════════════════════════════════════════════════════
+   TARJETAS DE DOCUMENTOS
+═══════════════════════════════════════════════════════════════ */
+
+.doc-item {
+  background: white;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  border: 1px solid #e0e0e0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.doc-info    { flex: 1; min-width: 0; }
+.doc-tipo    { font-size: 10px; color: #888; margin-bottom: 2px; text-transform: uppercase; }
+.doc-nombre  { font-size: 13px; font-weight: bold; color: #1F4E79; margin-bottom: 3px;
+               white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.doc-fecha   { font-size: 11px; color: #888; }
+.doc-derecha { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
+
+/* Badge (etiqueta de estado) base */
+.badge { font-size: 11px; font-weight: bold; padding: 3px 10px; border-radius: 20px; white-space: nowrap; }
+
+/* → CAMBIO 11: Colores de los estados de documentos */
+.badge-VIGENTE    { background: #E2EFDA; color: #375623; border: 1px solid #A9D18E; } /* Verde */
+.badge-POR-VENCER { background: #FFF2CC; color: #7F5B00; border: 1px solid #FFD966; } /* Amarillo */
+.badge-VENCIDO    { background: #FCE4D6; color: #833C00; border: 1px solid #F4B183; } /* Rojo */
+
+/* Botón "Ver PDF" */
+.btn-pdf {
+  font-size: 11px;
+  color: #1F4E79;
+  background: #DEEAF1;
+  border: 1px solid #BDD7EE;
+  border-radius: 6px;
+  padding: 4px 10px;
+  cursor: pointer;
+  font-weight: bold;
+}
+.btn-pdf:hover { background: #BDD7EE; }
+
+/* ═══════════════════════════════════════════════════════════════
+   VISOR DE PDF (ventana que aparece al hacer click en Ver PDF)
+═══════════════════════════════════════════════════════════════ */
+
+#visor-pdf {
+  display: none;
+  position: fixed;                 /* Cubre toda la pantalla */
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: rgba(0,0,0,0.7);    /* Fondo oscuro semitransparente */
+  z-index: 1000;
+  flex-direction: column;
+}
+
+/* → CAMBIO 12: Color del encabezado del visor de PDF */
+.visor-header {
+  background: #1F4E79;             /* → Mismo azul que el encabezado */
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.visor-header span { color: white; font-size: 14px; font-weight: bold; }
+
+/* Botón cerrar del visor */
+.btn-cerrar {
+  background: rgba(255,255,255,0.2);
+  color: white; border: none; border-radius: 6px;
+  padding: 6px 14px; font-size: 13px; cursor: pointer; font-weight: bold;
+}
+
+/* El iframe que muestra el PDF */
+#iframe-pdf { flex: 1; border: none; width: 100%; }
+
+/* Botón cerrar sesión */
+.btn-salir {
+  display: block; margin: 16px 14px 0; padding: 11px;
+  background: white; color: #888; border: 1px solid #ddd;
+  border-radius: 10px; font-size: 13px; text-align: center;
+  cursor: pointer; font-weight: bold;
+}
+.btn-salir:hover { background: #f5f5f5; }
+
+.sin-datos { text-align: center; color: #aaa; font-size: 13px; padding: 20px 0; }
 </style>
 </head>
 <body>
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PANTALLA 1 — INGRESO DE PIN
+     Se muestra al abrir la página
+═══════════════════════════════════════════════════════════════ -->
 <div id="pantalla-pin">
   <div class="pin-card">
+
+    <!-- → CAMBIO 13: Texto del logo en la pantalla de PIN -->
     <div class="logo-band">VOLCÁN · PLANTA ÓXIDOS</div>
+
+    <!-- → CAMBIO 14: Título y subtítulo de la pantalla de PIN -->
     <h2>Control Documental</h2>
     <p>Ingresa tu PIN para continuar</p>
-    <input class="pin-input" type="password" id="input-pin" maxlength="6" placeholder="••••" onkeydown="if(event.key==='Enter') verificarPin()">
+
+    <!-- Campo de PIN: type="password" muestra puntos en vez de números -->
+    <input class="pin-input" type="password" id="input-pin" maxlength="6"
+           placeholder="••••" onkeydown="if(event.key==='Enter') verificarPin()">
+
+    <!-- Botón que llama a la función verificarPin() -->
     <button class="btn-entrar" onclick="verificarPin()">Ingresar</button>
+
+    <!-- Mensaje de error, oculto por defecto -->
     <p class="pin-error" id="pin-error">PIN incorrecto. Intenta nuevamente.</p>
   </div>
 </div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     PANTALLA 2 — PERFIL DEL OPERADOR
+     Oculta por defecto, se muestra cuando el PIN es correcto
+═══════════════════════════════════════════════════════════════ -->
 <div id="pantalla-perfil">
+
+  <!-- ENCABEZADO AZUL: foto + nombre + cargo + ID -->
   <div class="header-band">
+
+    <!-- Aquí JavaScript inserta la foto del operador -->
     <div id="avatar-container"></div>
+
+    <!-- Datos del operador (los llena JavaScript) -->
     <div class="header-info">
       <h1 id="op-nombre"></h1>
-      <p id="op-cargo"></p>
-      <p class="header-id" id="op-id"></p>
+      <p  id="op-cargo"></p>
+      <p  class="header-id" id="op-id"></p>
+    </div>
+
+    <!-- → CAMBIO 15: Logo de Volcán (descomenta y pon tu link)
+    <img src="https://drive.google.com/thumbnail?id=ID_DEL_LOGO&sz=w200"
+         style="height:38px; margin-left:auto; opacity:0.9;">
+    -->
+
+  </div>
+
+  <!-- GRILLA DE INFORMACIÓN -->
+  <div class="info-grid">
+    <div class="info-box">
+      <label>Área</label>
+      <span id="op-area"></span>
+    </div>
+    <div class="info-box">
+      <label>Años en empresa</label>
+      <span id="op-antiguedad"></span>
+    </div>
+    <div class="info-box" style="grid-column:1/-1"> <!-- ocupa las 2 columnas -->
+      <label>Tiempo en el puesto</label>
+      <span id="op-puesto"></span>
     </div>
   </div>
-  <div class="info-grid">
-    <div class="info-box"><label>Área</label><span id="op-area"></span></div>
-    <div class="info-box"><label>Años en empresa</label><span id="op-antiguedad"></span></div>
-    <div class="info-box" style="grid-column:1/-1"><label>Tiempo en el puesto</label><span id="op-puesto"></span></div>
-  </div>
+
+  <!-- RIESGOS CRÍTICOS -->
   <div class="seccion">
+    <!-- → CAMBIO 16: Texto del título de riesgos -->
     <div class="seccion-titulo">⚠ Riesgos críticos del área</div>
+    <!-- JavaScript inserta los tags de riesgos aquí -->
     <div class="riesgos-wrap" id="op-riesgos"></div>
   </div>
+
+  <!-- PESTAÑAS DE DOCUMENTOS -->
   <div class="tabs">
+    <!-- → CAMBIO 17: Nombres de las pestañas -->
     <div class="tab activa" onclick="cambiarTab(0)">Capacitaciones</div>
-    <div class="tab" onclick="cambiarTab(1)">Certificaciones</div>
-    <div class="tab" onclick="cambiarTab(2)">Médico / EPP</div>
+    <div class="tab"        onclick="cambiarTab(1)">Certificaciones</div>
+    <div class="tab"        onclick="cambiarTab(2)">Médico / EPP</div>
   </div>
+
+  <!-- Contenido de cada pestaña (JavaScript los llena) -->
   <div class="tab-content activa" id="tab-capacitaciones"></div>
-  <div class="tab-content" id="tab-certificaciones"></div>
-  <div class="tab-content" id="tab-medico"></div>
+  <div class="tab-content"        id="tab-certificaciones"></div>
+  <div class="tab-content"        id="tab-medico"></div>
+
+  <!-- → CAMBIO 18: Texto del botón cerrar sesión -->
   <button class="btn-salir" onclick="cerrarSesion()">Cerrar sesión</button>
+
 </div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     VISOR DE PDF (ventana emergente al hacer click en Ver PDF)
+═══════════════════════════════════════════════════════════════ -->
 <div id="visor-pdf">
   <div class="visor-header">
     <span id="visor-titulo">Documento</span>
     <button class="btn-cerrar" onclick="cerrarPDF()">✕ Cerrar</button>
   </div>
+  <!-- El PDF se carga aquí dentro -->
   <iframe id="iframe-pdf" allowfullscreen></iframe>
 </div>
+
+
+<!-- ═══════════════════════════════════════════════════════════════
+     LÓGICA JAVASCRIPT — NO TOCAR
+     Estas funciones controlan el comportamiento de la página
+═══════════════════════════════════════════════════════════════ -->
 <script>
-const params=new URLSearchParams(window.location.search);
-const idURL=params.get("id");
-let rolActual=null,idActual=null;
-function verificarPin(){
-  const pin=document.getElementById("input-pin").value.trim();
-  const encontrado=PINES[pin];
-  const error=document.getElementById("pin-error");
-  if(!encontrado){error.textContent="PIN incorrecto. Intenta nuevamente.";error.style.display="block";document.getElementById("input-pin").value="";return;}
-  error.style.display="none";
-  rolActual=encontrado.rol;
-  if(encontrado.rol==="operador"){
-    if(!idURL||encontrado.id!==idURL){error.textContent="No tienes permiso para ver este perfil.";error.style.display="block";document.getElementById("input-pin").value="";return;}
-    idActual=encontrado.id;
-  } else {
-    if(!idURL){error.textContent="QR inválido. No se encontró el operador.";error.style.display="block";return;}
-    idActual=idURL;
+
+  /* Lee el ID del operador de la URL (?id=OP-00100) */
+  const params = new URLSearchParams(window.location.search);
+  const idURL  = params.get("id");
+
+  let rolActual = null;
+  let idActual  = null;
+
+  /* Se ejecuta cuando el usuario hace click en "Ingresar" o presiona Enter */
+  function verificarPin() {
+    const pin       = document.getElementById("input-pin").value.trim();
+    const encontrado = PINES[pin];                    /* Busca el PIN en la lista */
+    const error     = document.getElementById("pin-error");
+
+    /* Si el PIN no existe → muestra error */
+    if (!encontrado) {
+      error.textContent = "PIN incorrecto. Intenta nuevamente.";
+      error.style.display = "block";
+      document.getElementById("input-pin").value = "";
+      return;
+    }
+
+    error.style.display = "none";
+    rolActual = encontrado.rol;
+
+    /* Si es operador → solo puede ver su propio perfil */
+    if (encontrado.rol === "operador") {
+      if (!idURL || encontrado.id !== idURL) {
+        error.textContent = "No tienes permiso para ver este perfil.";
+        error.style.display = "block";
+        document.getElementById("input-pin").value = "";
+        return;
+      }
+      idActual = encontrado.id;
+    } else {
+      /* Si es supervisor o maestro → ve al operador del QR */
+      if (!idURL) {
+        error.textContent = "QR inválido. No se encontró el operador.";
+        error.style.display = "block";
+        return;
+      }
+      idActual = idURL;
+    }
+
+    mostrarPerfil(idActual);
   }
-  mostrarPerfil(idActual);
-}
-function mostrarPerfil(id){
-  const op=OPERADORES.find(o=>o.id===id);
-  if(!op){document.getElementById("pin-error").textContent="Operador no encontrado.";document.getElementById("pin-error").style.display="block";return;}
-  const partes=op.nombre.split(" ");
-  const iniciales=(partes[1]?.[0]||"")+(partes[0]?.[0]||"");
-  const avatarContainer=document.getElementById("avatar-container");
-  const img=document.createElement("img");
-  img.className="avatar";img.src=driveDirecto(op.foto);img.alt=op.nombre;
-  img.onerror=function(){avatarContainer.innerHTML=`<div class="avatar-fallback">${iniciales.toUpperCase()}</div>`;};
-  avatarContainer.appendChild(img);
-  document.getElementById("op-nombre").textContent=op.nombre;
-  document.getElementById("op-cargo").textContent=op.cargo;
-  document.getElementById("op-id").textContent=op.id;
-  document.getElementById("op-area").textContent=op.area;
-  document.getElementById("op-antiguedad").textContent=tiempoDesde(op.fechaIngresoEmpresa);
-  document.getElementById("op-puesto").textContent=tiempoDesde(op.fechaIngresoPuesto);
-  const riesgosEl=document.getElementById("op-riesgos");
-  op.riesgos.forEach(r=>{const tag=document.createElement("span");tag.className="riesgo-tag";tag.textContent=r;riesgosEl.appendChild(tag);});
-  renderDocs("tab-capacitaciones",op.documentos.filter(d=>d.tipo==="Capacitación"));
-  renderDocs("tab-certificaciones",op.documentos.filter(d=>d.tipo==="Certificación"));
-  renderDocs("tab-medico",op.medico_epp);
-  document.getElementById("pantalla-pin").style.display="none";
-  document.getElementById("pantalla-perfil").style.display="block";
-}
-function renderDocs(cId,docs){
-  const el=document.getElementById(cId);
-  if(!docs||docs.length===0){el.innerHTML='<p class="sin-datos">Sin documentos registrados</p>';return;}
-  docs.forEach(doc=>{
-    const bc="badge-"+doc.estado.replace(/ /g,"-");
-    const div=document.createElement("div");div.className="doc-item";
-    div.innerHTML=`<div class="doc-info"><div class="doc-tipo">${doc.tipo||""}</div><div class="doc-nombre">${doc.nombre}</div><div class="doc-fecha">Vence: ${doc.vencimiento}</div></div><div class="doc-derecha"><span class="badge ${bc}">${doc.estado}</span>${doc.pdf?`<button class="btn-pdf" onclick="abrirPDF('${drivePreview(doc.pdf)}','${doc.nombre}')">Ver PDF</button>`:""}</div>`;
-    el.appendChild(div);
-  });
-}
-function cambiarTab(idx){document.querySelectorAll(".tab").forEach((t,i)=>t.classList.toggle("activa",i===idx));document.querySelectorAll(".tab-content").forEach((c,i)=>c.classList.toggle("activa",i===idx));}
-function abrirPDF(url,titulo){document.getElementById("visor-titulo").textContent=titulo;document.getElementById("iframe-pdf").src=url;document.getElementById("visor-pdf").style.display="flex";}
-function cerrarPDF(){document.getElementById("visor-pdf").style.display="none";document.getElementById("iframe-pdf").src="";}
-function cerrarSesion(){location.reload();}
+
+  /* Llena la pantalla con los datos del operador */
+  function mostrarPerfil(id) {
+    const op = OPERADORES.find(o => o.id === id);    /* Busca el operador por ID */
+
+    if (!op) {
+      document.getElementById("pin-error").textContent = "Operador no encontrado.";
+      document.getElementById("pin-error").style.display = "block";
+      return;
+    }
+
+    /* Crea las iniciales para el fallback si la foto no carga */
+    const partes   = op.nombre.split(" ");
+    const iniciales = (partes[1]?.[0] || "") + (partes[0]?.[0] || "");
+
+    /* Inserta la foto del operador */
+    const avatarContainer = document.getElementById("avatar-container");
+    const img = document.createElement("img");
+    img.className = "avatar";
+    img.src       = driveDirecto(op.foto);
+    img.alt       = op.nombre;
+    img.onerror   = function() {
+      avatarContainer.innerHTML = `<div class="avatar-fallback">${iniciales.toUpperCase()}</div>`;
+    };
+    avatarContainer.appendChild(img);
+
+    /* Rellena los campos de texto */
+    document.getElementById("op-nombre").textContent    = op.nombre;
+    document.getElementById("op-cargo").textContent     = op.cargo;
+    document.getElementById("op-id").textContent        = op.id;
+    document.getElementById("op-area").textContent      = op.area;
+    document.getElementById("op-antiguedad").textContent = tiempoDesde(op.fechaIngresoEmpresa);
+    document.getElementById("op-puesto").textContent    = tiempoDesde(op.fechaIngresoPuesto);
+
+    /* Crea los tags de riesgos */
+    const riesgosEl = document.getElementById("op-riesgos");
+    op.riesgos.forEach(r => {
+      const tag = document.createElement("span");
+      tag.className   = "riesgo-tag";
+      tag.textContent = r;
+      riesgosEl.appendChild(tag);
+    });
+
+    /* Separa documentos por tipo y llena cada pestaña */
+    renderDocs("tab-capacitaciones",  op.documentos.filter(d => d.tipo === "Capacitación"));
+    renderDocs("tab-certificaciones", op.documentos.filter(d => d.tipo === "Certificación"));
+    renderDocs("tab-medico",          op.medico_epp);
+
+    /* Oculta el PIN y muestra el perfil */
+    document.getElementById("pantalla-pin").style.display    = "none";
+    document.getElementById("pantalla-perfil").style.display = "block";
+  }
+
+  /* Crea las tarjetas de documentos dentro de cada pestaña */
+  function renderDocs(contenedorId, docs) {
+    const el = document.getElementById(contenedorId);
+
+    if (!docs || docs.length === 0) {
+      el.innerHTML = '<p class="sin-datos">Sin documentos registrados</p>';
+      return;
+    }
+
+    docs.forEach(doc => {
+      /* Convierte "POR VENCER" → "POR-VENCER" para que coincida con la clase CSS */
+      const badgeClass = "badge-" + doc.estado.replace(/ /g, "-");
+
+      const div = document.createElement("div");
+      div.className = "doc-item";
+      div.innerHTML = `
+        <div class="doc-info">
+          <div class="doc-tipo">${doc.tipo || ""}</div>
+          <div class="doc-nombre">${doc.nombre}</div>
+          <div class="doc-fecha">Vence: ${doc.vencimiento}</div>
+        </div>
+        <div class="doc-derecha">
+          <span class="badge ${badgeClass}">${doc.estado}</span>
+          ${doc.pdf
+            ? `<button class="btn-pdf" onclick="abrirPDF('${drivePreview(doc.pdf)}','${doc.nombre}')">Ver PDF</button>`
+            : ""}
+        </div>
+      `;
+      el.appendChild(div);
+    });
+  }
+
+  /* Cambia la pestaña activa */
+  function cambiarTab(idx) {
+    document.querySelectorAll(".tab").forEach((t,i)         => t.classList.toggle("activa", i === idx));
+    document.querySelectorAll(".tab-content").forEach((c,i) => c.classList.toggle("activa", i === idx));
+  }
+
+  /* Abre el visor de PDF */
+  function abrirPDF(url, titulo) {
+    document.getElementById("visor-titulo").textContent = titulo;
+    document.getElementById("iframe-pdf").src           = url;
+    document.getElementById("visor-pdf").style.display  = "flex";
+  }
+
+  /* Cierra el visor de PDF */
+  function cerrarPDF() {
+    document.getElementById("visor-pdf").style.display = "none";
+    document.getElementById("iframe-pdf").src          = "";
+  }
+
+  /* Cierra sesión recargando la página */
+  function cerrarSesion() {
+    location.reload();
+  }
+
 </script>
 </body>
 </html>
