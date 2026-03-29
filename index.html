@@ -540,7 +540,9 @@ body {
   }
 
 function abrirPDF(url, titulo) {
-    window.open(url, '_blank');
+    document.getElementById("visor-titulo").textContent = titulo;
+    document.getElementById("iframe-pdf").src           = url;
+    document.getElementById("visor-pdf").style.display  = "flex";
   }
 
   function cerrarPDF() {
