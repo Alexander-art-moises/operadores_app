@@ -76,7 +76,7 @@ function driveDirecto(url) {
 }
 function drivePreview(url) {
   const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (match) return `https://drive.google.com/file/d/${match[1]}/preview?rm=minimal`;
+  if (match) return `https://drive.google.com/file/d/${match[1]}/preview?rm=minimal&embedded=true`;
   return url;
 }
 function tiempoDesde(f) {
@@ -119,7 +119,7 @@ body {
 
 .pin-card {
   position: absolute;
-  top: 50%;
+  top: 62%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
