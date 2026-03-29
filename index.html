@@ -539,10 +539,8 @@ body {
     document.querySelectorAll(".tab-content").forEach((c,i) => c.classList.toggle("activa", i === idx));
   }
 
-  function abrirPDF(url, titulo) {
-    document.getElementById("visor-titulo").textContent = titulo;
-    document.getElementById("iframe-pdf").src           = url;
-    document.getElementById("visor-pdf").style.display  = "flex";
+function abrirPDF(url, titulo) {
+    window.open(url, '_blank');
   }
 
   function cerrarPDF() {
