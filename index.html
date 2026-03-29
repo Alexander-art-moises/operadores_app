@@ -19,10 +19,10 @@ const OPERADORES = [
   {
     id: "OP-00100",
     nombre: "Pérez Quispe, Juan Carlos",
+    dni: "12345678",
     area: "Chancado",
     cargo: "Operador de Chancado",
     fechaIngresoEmpresa: "01/03/2019",
-    fechaIngresoPuesto:  "15/06/2022",
     foto: "https://drive.google.com/file/d/1DC9-_-DbnWpZnKqY0KljF-SQgS9kEwH7/view?usp=sharing",
     riesgos: ["Trabajo en altura","Equipos en movimiento","Manipulación de Cargas"],
     documentos: [
@@ -37,10 +37,10 @@ const OPERADORES = [
   {
     id: "OP-00200",
     nombre: "García Torres, María Elena",
+    dni: "87654321",
     area: "Molienda",
     cargo: "Operadora de Molienda",
     fechaIngresoEmpresa: "10/07/2020",
-    fechaIngresoPuesto:  "10/07/2020",
     foto: "https://drive.google.com/file/d/1QhsIgQrtBqFJ_7d3W6aJml_-eMAj0iEY/view?usp=sharing",
     riesgos: ["Riesgo eléctrico","Trabajo en espacios confinados"],
     documentos: [
@@ -54,10 +54,10 @@ const OPERADORES = [
   {
     id: "OP-00300",
     nombre: "Rodríguez Lima, Carlos A.",
+    dni: "11223344",
     area: "Lixiviación",
     cargo: "Operador de Lixiviación",
     fechaIngresoEmpresa: "05/01/2018",
-    fechaIngresoPuesto:  "01/03/2021",
     foto: "https://drive.google.com/file/d/1JIRM62dhmycSRZxfvQZ6CokBBHUA7i9m/view?usp=sharing",
     riesgos: ["Manipulación de Sustancias Químicas","Caída de objetos"],
     documentos: [
@@ -76,7 +76,7 @@ function driveDirecto(url) {
 }
 function drivePreview(url) {
   const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (match) return `https://drive.google.com/file/d/${match[1]}/preview`;
+  if (match) return `https://drive.google.com/file/d/${match[1]}/preview?rm=minimal`;
   return url;
 }
 function tiempoDesde(f) {
@@ -102,7 +102,7 @@ body {
 }
 
 /* ══════════════════════════════
-   PANTALLA DE PIN — NUEVA
+   PANTALLA DE PIN
 ══════════════════════════════ */
 #pantalla-pin {
   min-height: 100vh;
@@ -110,17 +110,16 @@ body {
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('https://raw.githubusercontent.com/Alexander-art-moises/operadores_app/main/FONDO_PIN_ADECUADO.png');
+  background-image: url('https://raw.githubusercontent.com/Alexander-art-moises/operadores_app/main/fondo_pin.png');
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
   position: relative;
 }
 
-/* Zona donde van el input y el botón — centrado en la zona blanca del fondo */
 .pin-card {
   position: absolute;
-  top: 62%;
+  top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   width: 80%;
@@ -131,7 +130,6 @@ body {
   gap: 14px;
 }
 
-/* Campo de PIN */
 .pin-input {
   width: 100%;
   padding: 5px;
@@ -148,11 +146,14 @@ body {
   box-shadow: 0 2px 12px rgba(31,78,121,0.10);
 }
 .pin-input:focus {
-  border-color: #1F4E79;
+  border-color: #ff8a00;
   background: rgba(255,255,255,0.97);
 }
+.pin-input::placeholder {
+  color: #ff8a00;
+  opacity: 1;
+}
 
-/* Botón INGRESAR */
 .btn-entrar {
   width: 100%;
   padding: 15px;
@@ -169,7 +170,6 @@ body {
 .btn-entrar:hover { background: #2E75B6; }
 .btn-entrar:active { transform: scale(0.98); }
 
-/* Error */
 .pin-error {
   color: #fff;
   background: rgba(192,0,0,0.80);
@@ -187,7 +187,7 @@ body {
 #pantalla-perfil { display: none; max-width: 420px; margin: 0 auto; padding-bottom: 32px; }
 
 .header-band {
-  background: #1F4E79;
+  background: #1f3055;
   padding: 20px 20px 24px;
   display: flex;
   align-items: center;
@@ -197,63 +197,64 @@ body {
   width: 64px; height: 64px;
   border-radius: 50%;
   object-fit: cover;
-  border: 3px solid #BDD7EE;
-  background: #2E75B6;
+  border: 3px solid #ff7300;
+  background: #264984;
   flex-shrink: 0;
 }
 .avatar-fallback {
   width: 64px; height: 64px;
   border-radius: 50%;
-  background: #2E75B6;
-  border: 3px solid #BDD7EE;
+  background: #264984;
+  border: 3px solid #ff7300;
   display: flex; align-items: center; justify-content: center;
   font-size: 22px; font-weight: bold; color: white;
   flex-shrink: 0;
 }
 .header-info { flex: 1; }
-.header-info h1 { font-size: 16px; font-weight: bold; color: white; margin-bottom: 3px; }
-.header-info p  { font-size: 13px; color: #BDD7EE; }
-.header-id      { font-size: 11px; color: #9DC3E6; margin-top: 4px; }
+.header-info h1      { font-size: 16px; font-weight: bold; color: #ffffff; margin-bottom: 3px; }
+.header-slogan       { font-size: 13px; color: #ff7300; margin-bottom: 2px; }
+.header-dni          { font-size: 11px; color: rgba(255,255,255,0.45); margin-top: 3px; }
 
 .info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   padding: 14px;
-  background: #EAF2FB;
+  background: #eaf0fb;
 }
 .info-box {
   background: white;
   border-radius: 10px;
   padding: 10px 12px;
-  border: 1px solid #BDD7EE;
+  border: 1px solid #c5d3ea;
 }
-.info-box label { font-size: 11px; color: #666; display: block; margin-bottom: 2px; }
-.info-box span  { font-size: 13px; font-weight: bold; color: #1F4E79; }
+.info-box label { font-size: 11px; color: #888; display: block; margin-bottom: 2px; }
+.info-box span  { font-size: 13px; font-weight: bold; color: #1f3055; }
 
 .seccion { padding: 0 14px 6px; }
 .seccion-titulo {
-  font-size: 11px; font-weight: bold; color: #888;
+  font-size: 11px; font-weight: bold; color: #ff7300;
   text-transform: uppercase; letter-spacing: 0.05em;
   padding: 14px 0 8px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #ffe0c0;
   margin-bottom: 10px;
 }
+
 .riesgos-wrap { display: flex; flex-wrap: wrap; gap: 6px; }
 .riesgo-tag {
-  background: #FFF2CC;
-  color: #7F5B00;
+  background: #fff8f0;
+  color: #cc5e00;
   font-size: 12px;
   padding: 5px 11px;
   border-radius: 20px;
-  border: 1px solid #FFD966;
+  border: 1.5px solid #ff7300;
   font-weight: bold;
 }
 
 .tabs {
   display: flex;
   background: white;
-  border-bottom: 2px solid #BDD7EE;
+  border-bottom: 2px solid #c5d3ea;
   margin: 14px 0 0;
   position: sticky;
   top: 0;
@@ -271,8 +272,8 @@ body {
   font-weight: bold;
 }
 .tab.activa {
-  color: #1F4E79;
-  border-bottom-color: #1F4E79;
+  color: #1f3055;
+  border-bottom-color: #ff7300;
 }
 .tab-content { display: none; padding: 4px 14px 8px; }
 .tab-content.activa { display: block; }
@@ -290,7 +291,7 @@ body {
 }
 .doc-info    { flex: 1; min-width: 0; }
 .doc-tipo    { font-size: 10px; color: #888; margin-bottom: 2px; text-transform: uppercase; }
-.doc-nombre  { font-size: 13px; font-weight: bold; color: #1F4E79; margin-bottom: 3px;
+.doc-nombre  { font-size: 13px; font-weight: bold; color: #1f3055; margin-bottom: 3px;
                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .doc-fecha   { font-size: 11px; color: #888; }
 .doc-derecha { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; flex-shrink: 0; }
@@ -302,15 +303,15 @@ body {
 
 .btn-pdf {
   font-size: 11px;
-  color: #1F4E79;
-  background: #DEEAF1;
-  border: 1px solid #BDD7EE;
+  color: #1f3055;
+  background: #e8eef8;
+  border: 1px solid #c5d3ea;
   border-radius: 6px;
   padding: 4px 10px;
   cursor: pointer;
   font-weight: bold;
 }
-.btn-pdf:hover { background: #BDD7EE; }
+.btn-pdf:hover { background: #c5d3ea; }
 
 #visor-pdf {
   display: none;
@@ -321,7 +322,7 @@ body {
   flex-direction: column;
 }
 .visor-header {
-  background: #1F4E79;
+  background: #1f3055;
   padding: 12px 16px;
   display: flex;
   align-items: center;
@@ -350,7 +351,6 @@ body {
 <!-- PANTALLA 1 — PIN -->
 <div id="pantalla-pin">
   <div class="pin-card">
-
     <input
       class="pin-input"
       type="password"
@@ -361,11 +361,8 @@ body {
       pattern="[0-9]*"
       onkeydown="if(event.key==='Enter') verificarPin()"
     >
-
     <button class="btn-entrar" onclick="verificarPin()">INGRESAR</button>
-
     <p class="pin-error" id="pin-error">PIN incorrecto. Intenta nuevamente.</p>
-
   </div>
 </div>
 
@@ -377,8 +374,8 @@ body {
     <div id="avatar-container"></div>
     <div class="header-info">
       <h1 id="op-nombre"></h1>
-      <p  id="op-cargo"></p>
-      <p  class="header-id" id="op-id"></p>
+      <p class="header-slogan">Tu seguridad vale más que el doré</p>
+      <p class="header-dni" id="op-dni"></p>
     </div>
   </div>
 
@@ -392,20 +389,20 @@ body {
       <span id="op-antiguedad"></span>
     </div>
     <div class="info-box" style="grid-column:1/-1">
-      <label>Tiempo en el puesto</label>
+      <label>Puesto</label>
       <span id="op-puesto"></span>
     </div>
   </div>
 
   <div class="seccion">
-    <div class="seccion-titulo">⚠ Riesgos críticos del área</div>
+    <div class="seccion-titulo">Riesgos críticos del área</div>
     <div class="riesgos-wrap" id="op-riesgos"></div>
   </div>
 
   <div class="tabs">
     <div class="tab activa" onclick="cambiarTab(0)">Capacitaciones</div>
     <div class="tab"        onclick="cambiarTab(1)">Certificaciones</div>
-    <div class="tab"        onclick="cambiarTab(2)">Médico / EPP</div>
+    <div class="tab"        onclick="cambiarTab(2)">Exam. Médico</div>
   </div>
 
   <div class="tab-content activa" id="tab-capacitaciones"></div>
@@ -439,8 +436,8 @@ body {
     const error      = document.getElementById("pin-error");
 
     if (!encontrado) {
-      error.textContent    = "PIN incorrecto. Intenta nuevamente.";
-      error.style.display  = "block";
+      error.textContent   = "PIN incorrecto. Intenta nuevamente.";
+      error.style.display = "block";
       document.getElementById("input-pin").value = "";
       return;
     }
@@ -471,12 +468,12 @@ body {
   function mostrarPerfil(id) {
     const op = OPERADORES.find(o => o.id === id);
     if (!op) {
-      document.getElementById("pin-error").textContent    = "Operador no encontrado.";
-      document.getElementById("pin-error").style.display  = "block";
+      document.getElementById("pin-error").textContent   = "Operador no encontrado.";
+      document.getElementById("pin-error").style.display = "block";
       return;
     }
 
-    const partes   = op.nombre.split(" ");
+    const partes    = op.nombre.split(" ");
     const iniciales = (partes[1]?.[0] || "") + (partes[0]?.[0] || "");
 
     const avatarContainer = document.getElementById("avatar-container");
@@ -490,11 +487,10 @@ body {
     avatarContainer.appendChild(img);
 
     document.getElementById("op-nombre").textContent     = op.nombre;
-    document.getElementById("op-cargo").textContent      = op.cargo;
-    document.getElementById("op-id").textContent         = op.id;
+    document.getElementById("op-dni").textContent        = "DNI: " + op.dni;
     document.getElementById("op-area").textContent       = op.area;
     document.getElementById("op-antiguedad").textContent = tiempoDesde(op.fechaIngresoEmpresa);
-    document.getElementById("op-puesto").textContent     = tiempoDesde(op.fechaIngresoPuesto);
+    document.getElementById("op-puesto").textContent     = op.cargo;
 
     const riesgosEl = document.getElementById("op-riesgos");
     op.riesgos.forEach(r => {
