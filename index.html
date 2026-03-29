@@ -76,7 +76,7 @@ function driveDirecto(url) {
 }
 function drivePreview(url) {
   const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (match) return `https://drive.google.com/file/d/${match[1]}/preview?rm=minimal&embedded=true`;
+  if (match) return `https://drive.google.com/file/d/${match[1]}/preview?rm=minimal&embedded=true&chrome=false`;
   return url;
 }
 function tiempoDesde(f) {
