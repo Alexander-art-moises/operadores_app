@@ -6,92 +6,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Volcán · Planta Óxidos</title>
 
-<script>
-const PINES = {
-  "0000": { rol: "maestro" },
-  "1111": { rol: "supervisor" },
-  "2201": { rol: "operador", id: "OP-00100" },
-  "2202": { rol: "operador", id: "OP-00200" },
-  "2203": { rol: "operador", id: "OP-00300" },
-};
-
-const OPERADORES = [
-  {
-    id: "OP-00100",
-    nombre: "Pérez Quispe, Juan Carlos",
-    dni: "12345678",
-    area: "Chancado",
-    cargo: "Operador de Chancado",
-    fechaIngresoEmpresa: "01/03/2019",
-    foto: "https://drive.google.com/file/d/1DC9-_-DbnWpZnKqY0KljF-SQgS9kEwH7/view?usp=sharing",
-    riesgos: ["Trabajo en altura","Equipos en movimiento","Manipulación de Cargas"],
-    documentos: [
-      { tipo:"Certificación", nombre:"Trabajo en altura", emision:"10/01/2023", vencimiento:"10/01/2025", estado:"VENCIDO", pdf:"https://drive.google.com/file/d/1gN0q0P61JnsoJXfoYWjCl0OwXp7JVoQ1/view?usp=sharing" },
-      { tipo:"Capacitación", nombre:"Equipos en movimiento", emision:"05/03/2024", vencimiento:"05/03/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1xFNjBN7fTkgaCvlm-z0fKeOOVDYchFoG/view?usp=sharing" },
-      { tipo:"Capacitación", nombre:"Manipulación de Cargas", emision:"15/10/2024", vencimiento:"15/04/2025", estado:"POR VENCER", pdf:"https://drive.google.com/file/d/19wnkKp7I60kyw3QX3-_DFiLMeXESMIWk/view?usp=sharing" },
-    ],
-    medico_epp: [
-      { tipo:"Examen Médico", nombre:"Examen Ocupacional Anual", emision:"01/06/2024", vencimiento:"01/06/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing" },
-    ],
-  },
-  {
-    id: "OP-00200",
-    nombre: "García Torres, María Elena",
-    dni: "87654321",
-    area: "Molienda",
-    cargo: "Operadora de Molienda",
-    fechaIngresoEmpresa: "10/07/2020",
-    foto: "https://drive.google.com/file/d/1QhsIgQrtBqFJ_7d3W6aJml_-eMAj0iEY/view?usp=sharing",
-    riesgos: ["Riesgo eléctrico","Trabajo en espacios confinados"],
-    documentos: [
-      { tipo:"Certificación", nombre:"Riesgo eléctrico", emision:"20/06/2024", vencimiento:"20/06/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1FA_OKghXi-_rcDofBavcziQB9FMwOM9H/view?usp=sharing" },
-      { tipo:"Capacitación", nombre:"Trabajo en espacios confinados", emision:"01/11/2023", vencimiento:"01/11/2025", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1Q8R6aZcNm71giE2dgoSwfAzyxxsR3WoT/view?usp=sharing" },
-    ],
-    medico_epp: [
-      { tipo:"Examen Médico", nombre:"Examen Ocupacional Anual", emision:"15/08/2024", vencimiento:"15/08/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing" },
-    ],
-  },
-  {
-    id: "OP-00300",
-    nombre: "Rodríguez Lima, Carlos A.",
-    dni: "11223344",
-    area: "Lixiviación",
-    cargo: "Operador de Lixiviación",
-    fechaIngresoEmpresa: "05/01/2018",
-    foto: "https://drive.google.com/file/d/1JIRM62dhmycSRZxfvQZ6CokBBHUA7i9m/view?usp=sharing",
-    riesgos: ["Manipulación de Sustancias Químicas","Caída de objetos"],
-    documentos: [
-      { tipo:"Certificación", nombre:"Manipulación de Sustancias Químicas", emision:"12/04/2024", vencimiento:"12/04/2026", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1PI3DCC7WMDosOy2dvex8X2Dpld9cr0Kr/view?usp=sharing" },
-    ],
-    medico_epp: [
-      { tipo:"Examen Médico", nombre:"Examen Ocupacional Anual", emision:"01/02/2025", vencimiento:"01/02/2027", estado:"VIGENTE", pdf:"https://drive.google.com/file/d/1CdKuWXzAap8j2KBxY-Gk-_L-yeMfFOsP/view?usp=sharing" },
-    ],
-  },
-];
-
-function driveDirecto(url) {
-  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (match) return `https://drive.google.com/thumbnail?id=${match[1]}&sz=w400`;
-  return url;
-}
-function drivePreview(url) {
-  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
-  if (match) return `https://drive.google.com/file/d/${match[1]}/preview?rm=minimal&embedded=true&chrome=false`;
-  return url;
-}
-function tiempoDesde(f) {
-  const [d,m,y] = f.split("/").map(Number);
-  const desde = new Date(y, m-1, d);
-  const hoy = new Date();
-  let a = hoy.getFullYear() - desde.getFullYear();
-  let ms = hoy.getMonth() - desde.getMonth();
-  if (ms < 0) { a--; ms += 12; }
-  if (a > 0 && ms > 0) return `${a} año${a>1?"s":""} ${ms} mes${ms>1?"es":""}`;
-  if (a > 0) return `${a} año${a>1?"s":""}`;
-  return `${ms} mes${ms>1?"es":""}`;
-}
-</script>
-
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -102,12 +16,34 @@ body {
 }
 
 /* ══════════════════════════════
+   PANTALLA DE CARGA
+══════════════════════════════ */
+#pantalla-carga {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #1f3055;
+  gap: 20px;
+}
+.spinner {
+  width: 48px; height: 48px;
+  border: 5px solid rgba(255,255,255,0.2);
+  border-top-color: #ff7300;
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+.carga-texto { color: rgba(255,255,255,0.7); font-size: 14px; }
+
+/* ══════════════════════════════
    PANTALLA DE PIN
 ══════════════════════════════ */
 #pantalla-pin {
   min-height: 100vh;
   width: 100%;
-  display: flex;
+  display: none;
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
@@ -356,6 +292,12 @@ body {
 </head>
 <body>
 
+<!-- PANTALLA CARGA -->
+<div id="pantalla-carga">
+  <div class="spinner"></div>
+  <p class="carga-texto">Cargando datos...</p>
+</div>
+
 <!-- PANTALLA 1 — PIN -->
 <div id="pantalla-pin">
   <div class="pin-card">
@@ -369,16 +311,14 @@ body {
       pattern="[0-9]*"
       onkeydown="if(event.key==='Enter') verificarPin()"
     >
-   <button class="btn-entrar" onclick="verificarPin()">INGRESAR</button>
-<p class="pin-error" id="pin-error">PIN incorrecto. Intenta nuevamente.</p>
-<p class="pin-frase">Cada tarea, cada turno,<br>cada decisión importa.<br>Tú eres lo más valioso de<br>esta operación.</p>
+    <button class="btn-entrar" onclick="verificarPin()">INGRESAR</button>
+    <p class="pin-error" id="pin-error">PIN incorrecto. Intenta nuevamente.</p>
+    <p class="pin-frase">Cada tarea, cada turno,<br>cada decisión importa.<br>Tú eres lo más valioso de<br>esta operación.</p>
   </div>
 </div>
 
-
 <!-- PANTALLA 2 — PERFIL -->
 <div id="pantalla-perfil">
-
   <div class="header-band">
     <div id="avatar-container"></div>
     <div class="header-info">
@@ -387,41 +327,25 @@ body {
       <p class="header-dni" id="op-dni"></p>
     </div>
   </div>
-
   <div class="info-grid">
-    <div class="info-box">
-      <label>Área</label>
-      <span id="op-area"></span>
-    </div>
-    <div class="info-box">
-      <label>Años en empresa</label>
-      <span id="op-antiguedad"></span>
-    </div>
-    <div class="info-box" style="grid-column:1/-1">
-      <label>Puesto</label>
-      <span id="op-puesto"></span>
-    </div>
+    <div class="info-box"><label>Área</label><span id="op-area"></span></div>
+    <div class="info-box"><label>Años en empresa</label><span id="op-antiguedad"></span></div>
+    <div class="info-box" style="grid-column:1/-1"><label>Puesto</label><span id="op-puesto"></span></div>
   </div>
-
   <div class="seccion">
     <div class="seccion-titulo">Riesgos críticos del área</div>
     <div class="riesgos-wrap" id="op-riesgos"></div>
   </div>
-
   <div class="tabs">
     <div class="tab activa" onclick="cambiarTab(0)">Capacitaciones</div>
     <div class="tab"        onclick="cambiarTab(1)">Certificaciones</div>
     <div class="tab"        onclick="cambiarTab(2)">Exam. Médico</div>
   </div>
-
   <div class="tab-content activa" id="tab-capacitaciones"></div>
   <div class="tab-content"        id="tab-certificaciones"></div>
   <div class="tab-content"        id="tab-medico"></div>
-
   <button class="btn-salir" onclick="cerrarSesion()">Cerrar sesión</button>
-
 </div>
-
 
 <!-- VISOR PDF -->
 <div id="visor-pdf">
@@ -432,135 +356,302 @@ body {
   <iframe id="iframe-pdf" allowfullscreen></iframe>
 </div>
 
-
 <script>
-  const params  = new URLSearchParams(window.location.search);
-  const idURL   = params.get("id");
-  let rolActual = null;
-  let idActual  = null;
+/* ══════════════════════════════════════════════
+   CONFIGURACIÓN GOOGLE SHEETS
+══════════════════════════════════════════════ */
+const SHEETS_ID  = "1FoN-S-KOjs1vRuekQktGnX17_2pduM9ZjhDG3g8t5ZM";
+const PIN_MAESTRO = "0000";
+const PIN_SUPER   = "2002";
+const PIN_ALEX    = "1008";
+const DNI_ALEX    = "75073340";
 
-  function verificarPin() {
-    const pin        = document.getElementById("input-pin").value.trim();
-    const encontrado = PINES[pin];
-    const error      = document.getElementById("pin-error");
+/* Variables globales */
+let colaboradores = [];
+let riesgos       = [];
+let documentos    = [];
+let medico        = [];
 
-    if (!encontrado) {
-      error.textContent   = "PIN incorrecto. Intenta nuevamente.";
-      error.style.display = "block";
-      document.getElementById("input-pin").value = "";
-      return;
-    }
+const params = new URLSearchParams(window.location.search);
+const idURL  = params.get("id");
 
-    error.style.display = "none";
-    rolActual = encontrado.rol;
+/* ══════════════════════════════════════════════
+   CARGA DE DATOS DESDE GOOGLE SHEETS
+══════════════════════════════════════════════ */
+function sheetURL(hoja) {
+  return `https://docs.google.com/spreadsheets/d/${SHEETS_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(hoja)}`;
+}
 
-    if (encontrado.rol === "operador") {
-      if (!idURL || encontrado.id !== idURL) {
-        error.textContent   = "No tienes permiso para ver este perfil.";
-        error.style.display = "block";
-        document.getElementById("input-pin").value = "";
-        return;
-      }
-      idActual = encontrado.id;
-    } else {
-      if (!idURL) {
-        error.textContent   = "QR inválido. No se encontró el operador.";
-        error.style.display = "block";
-        return;
-      }
-      idActual = idURL;
-    }
+async function fetchCSV(hoja) {
+  const res  = await fetch(sheetURL(hoja));
+  const text = await res.text();
+  return parseCSV(text);
+}
 
-    mostrarPerfil(idActual);
+function parseCSV(text) {
+  const lines   = text.trim().split("\n");
+  const headers = parseLine(lines[0]);
+  return lines.slice(1).map(line => {
+    const vals = parseLine(line);
+    const obj  = {};
+    headers.forEach((h, i) => obj[h.trim().replace(/"/g,"")] = (vals[i] || "").trim().replace(/"/g,""));
+    return obj;
+  });
+}
+
+function parseLine(line) {
+  const result = [];
+  let cur = "", inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const c = line[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { result.push(cur); cur = ""; }
+    else { cur += c; }
+  }
+  result.push(cur);
+  return result;
+}
+
+async function cargarDatos() {
+  try {
+    [colaboradores, riesgos, documentos, medico] = await Promise.all([
+      fetchCSV("1_Colaboradores"),
+      fetchCSV("2_Riesgos"),
+      fetchCSV("3_Documentos"),
+      fetchCSV("4_Medico"),
+    ]);
+    document.getElementById("pantalla-carga").style.display = "none";
+    document.getElementById("pantalla-pin").style.display   = "flex";
+  } catch(e) {
+    document.querySelector(".carga-texto").textContent = "Error al cargar. Verifica tu conexión.";
+  }
+}
+
+/* ══════════════════════════════════════════════
+   LÓGICA DE PINES
+══════════════════════════════════════════════ */
+function verificarPin() {
+  const pin   = document.getElementById("input-pin").value.trim();
+  const error = document.getElementById("pin-error");
+  error.style.display = "none";
+
+  /* PIN maestro */
+  if (pin === PIN_MAESTRO) {
+    if (!idURL) { mostrarError("QR inválido."); return; }
+    mostrarPerfil(idURL); return;
   }
 
-  function mostrarPerfil(id) {
-    const op = OPERADORES.find(o => o.id === id);
-    if (!op) {
-      document.getElementById("pin-error").textContent   = "Operador no encontrado.";
-      document.getElementById("pin-error").style.display = "block";
-      return;
+  /* PIN de Alexander — solo su perfil */
+  if (pin === PIN_ALEX) {
+    if (!idURL || idURL !== DNI_ALEX) { mostrarError("No tienes permiso para ver este perfil."); return; }
+    mostrarPerfil(DNI_ALEX); return;
+  }
+
+  /* PIN supervisión — cualquier perfil menos el de Alexander */
+  if (pin === PIN_SUPER) {
+    if (!idURL) { mostrarError("QR inválido."); return; }
+    if (idURL === DNI_ALEX) { mostrarError("No tienes permiso para ver este perfil."); return; }
+    mostrarPerfil(idURL); return;
+  }
+
+  /* PIN colaborador — 4 primeros dígitos del DNI */
+  const dniLimpio = (dni) => String(parseInt(dni || "0"));
+  const op = colaboradores.find(c => {
+    const dni = dniLimpio(c.DNI);
+    return dni.startsWith(pin) && pin.length === 4 && dni !== DNI_ALEX;
+  });
+
+  if (op) {
+    const dni = dniLimpio(op.DNI);
+    if (!idURL || idURL !== dni) { mostrarError("No tienes permiso para ver este perfil."); return; }
+    mostrarPerfil(dni); return;
+  }
+
+  mostrarError("PIN incorrecto. Intenta nuevamente.");
+}
+
+function mostrarError(msg) {
+  const e = document.getElementById("pin-error");
+  e.textContent   = msg;
+  e.style.display = "block";
+  document.getElementById("input-pin").value = "";
+}
+
+/* ══════════════════════════════════════════════
+   MOSTRAR PERFIL
+══════════════════════════════════════════════ */
+function mostrarPerfil(dni) {
+  const dniLimpio = (d) => String(parseInt(d || "0"));
+  const op = colaboradores.find(c => dniLimpio(c.DNI) === dniLimpio(dni));
+  if (!op) { mostrarError("Operador no encontrado."); return; }
+
+  /* Foto */
+  const avatarContainer = document.getElementById("avatar-container");
+  avatarContainer.innerHTML = "";
+  const partes    = (op.Nombre || "").split(" ");
+  const iniciales = (partes[1]?.[0] || "") + (partes[0]?.[0] || "");
+  const fotoURL   = op.Foto || "";
+
+  if (fotoURL.includes("drive.google.com")) {
+    const match = fotoURL.match(/\/d\/([a-zA-Z0-9_-]+)/);
+    if (match) {
+      const img     = document.createElement("img");
+      img.className = "avatar";
+      img.src       = `https://drive.google.com/thumbnail?id=${match[1]}&sz=w400`;
+      img.onerror   = () => { avatarContainer.innerHTML = `<div class="avatar-fallback">${iniciales.toUpperCase()}</div>`; };
+      avatarContainer.appendChild(img);
     }
+  } else {
+    avatarContainer.innerHTML = `<div class="avatar-fallback">${iniciales.toUpperCase()}</div>`;
+  }
 
-    const partes    = op.nombre.split(" ");
-    const iniciales = (partes[1]?.[0] || "") + (partes[0]?.[0] || "");
+  /* Datos básicos */
+  document.getElementById("op-nombre").textContent     = op.Nombre || "";
+  document.getElementById("op-dni").textContent        = "DNI: " + dniLimpio(op.DNI);
+  document.getElementById("op-puesto").textContent     = op.Cargo || "";
+  document.getElementById("op-antiguedad").textContent = tiempoDesde(op.FechaIngreso || "");
 
-    const avatarContainer = document.getElementById("avatar-container");
-    const img = document.createElement("img");
-    img.className = "avatar";
-    img.src       = driveDirecto(op.foto);
-    img.alt       = op.nombre;
-    img.onerror   = function() {
-      avatarContainer.innerHTML = `<div class="avatar-fallback">${iniciales.toUpperCase()}</div>`;
-    };
-    avatarContainer.appendChild(img);
+  /* Área — muestra hasta 3 áreas */
+  const areas = [op.Area1, op.Area2, op.Area3].filter(a => a && a.trim());
+  document.getElementById("op-area").textContent = areas.join(" / ") || "Sin área asignada";
 
-    document.getElementById("op-nombre").textContent     = op.nombre;
-    document.getElementById("op-dni").textContent        = "DNI: " + op.dni;
-    document.getElementById("op-area").textContent       = op.area;
-    document.getElementById("op-antiguedad").textContent = tiempoDesde(op.fechaIngresoEmpresa);
-    document.getElementById("op-puesto").textContent     = op.cargo;
-
-    const riesgosEl = document.getElementById("op-riesgos");
-    op.riesgos.forEach(r => {
-      const tag = document.createElement("span");
+  /* Riesgos — combina áreas sin duplicados */
+  const riesgosSet = new Set();
+  areas.forEach(area => {
+    riesgos.filter(r => r.Area === area).forEach(r => riesgosSet.add(r.Riesgo));
+  });
+  const riesgosEl = document.getElementById("op-riesgos");
+  riesgosEl.innerHTML = "";
+  if (riesgosSet.size === 0) {
+    riesgosEl.innerHTML = '<span style="color:#aaa;font-size:12px;">Sin riesgos asignados</span>';
+  } else {
+    riesgosSet.forEach(r => {
+      const tag       = document.createElement("span");
       tag.className   = "riesgo-tag";
       tag.textContent = r;
       riesgosEl.appendChild(tag);
     });
-
-    renderDocs("tab-capacitaciones",  op.documentos.filter(d => d.tipo === "Capacitación"));
-    renderDocs("tab-certificaciones", op.documentos.filter(d => d.tipo === "Certificación"));
-    renderDocs("tab-medico",          op.medico_epp);
-
-    document.getElementById("pantalla-pin").style.display    = "none";
-    document.getElementById("pantalla-perfil").style.display = "block";
   }
 
-  function renderDocs(contenedorId, docs) {
-    const el = document.getElementById(contenedorId);
-    if (!docs || docs.length === 0) {
-      el.innerHTML = '<p class="sin-datos">Sin documentos registrados</p>';
-      return;
-    }
-    docs.forEach(doc => {
-      const badgeClass = "badge-" + doc.estado.replace(/ /g, "-");
-      const div = document.createElement("div");
-      div.className = "doc-item";
-      div.innerHTML = `
-        <div class="doc-info">
-          <div class="doc-tipo">${doc.tipo || ""}</div>
-          <div class="doc-nombre">${doc.nombre}</div>
-          <div class="doc-fecha">Vence: ${doc.vencimiento}</div>
-        </div>
-        <div class="doc-derecha">
-          <span class="badge ${badgeClass}">${doc.estado}</span>
-          ${doc.pdf ? `<button class="btn-pdf" onclick="abrirPDF('${drivePreview(doc.pdf)}','${doc.nombre}')">Ver PDF</button>` : ""}
-        </div>
-      `;
-      el.appendChild(div);
-    });
-  }
+  /* Documentos */
+  const dniStr   = dniLimpio(op.DNI);
+  const docsOp   = documentos.filter(d => dniLimpio(d.DNI) === dniStr && d.Tipo && d.Nombre);
+  const medicoOp = medico.filter(d => dniLimpio(d.DNI) === dniStr && d.Nombre);
 
-  function cambiarTab(idx) {
-    document.querySelectorAll(".tab").forEach((t,i)         => t.classList.toggle("activa", i === idx));
-    document.querySelectorAll(".tab-content").forEach((c,i) => c.classList.toggle("activa", i === idx));
+  renderDocs("tab-capacitaciones",  docsOp.filter(d => d.Tipo === "Capacitación"));
+  renderDocs("tab-certificaciones", docsOp.filter(d => d.Tipo === "Certificación"));
+  renderMedico("tab-medico", medicoOp);
+
+  /* Mostrar pantalla */
+  document.getElementById("pantalla-pin").style.display    = "none";
+  document.getElementById("pantalla-perfil").style.display = "block";
+}
+
+/* ══════════════════════════════════════════════
+   RENDER DOCUMENTOS
+══════════════════════════════════════════════ */
+function renderDocs(contenedorId, docs) {
+  const el = document.getElementById(contenedorId);
+  el.innerHTML = "";
+  if (!docs || docs.length === 0) {
+    el.innerHTML = '<p class="sin-datos">Sin documentos registrados</p>';
+    return;
   }
+  docs.forEach(doc => {
+    const estado     = doc.Estado || "";
+    const badgeClass = "badge-" + estado.replace(/ /g, "-");
+    const pdfURL     = doc.PDF ? drivePreview(doc.PDF) : "";
+    const div        = document.createElement("div");
+    div.className    = "doc-item";
+    div.innerHTML    = `
+      <div class="doc-info">
+        <div class="doc-tipo">${doc.Tipo || ""}</div>
+        <div class="doc-nombre">${doc.Nombre || ""}</div>
+        <div class="doc-fecha">Vence: ${doc.FechaVencimiento || "—"}</div>
+      </div>
+      <div class="doc-derecha">
+        ${estado ? `<span class="badge ${badgeClass}">${estado}</span>` : ""}
+        ${pdfURL ? `<button class="btn-pdf" onclick="abrirPDF('${pdfURL}','${doc.Nombre}')">Ver PDF</button>` : ""}
+      </div>
+    `;
+    el.appendChild(div);
+  });
+}
+
+function renderMedico(contenedorId, docs) {
+  const el = document.getElementById(contenedorId);
+  el.innerHTML = "";
+  if (!docs || docs.length === 0) {
+    el.innerHTML = '<p class="sin-datos">Sin exámenes registrados</p>';
+    return;
+  }
+  docs.forEach(doc => {
+    const estado     = doc.Estado || "";
+    const badgeClass = "badge-" + estado.replace(/ /g, "-");
+    const pdfURL     = doc.PDF ? drivePreview(doc.PDF) : "";
+    const div        = document.createElement("div");
+    div.className    = "doc-item";
+    div.innerHTML    = `
+      <div class="doc-info">
+        <div class="doc-tipo">Examen Médico</div>
+        <div class="doc-nombre">${doc.Nombre || ""}</div>
+        <div class="doc-fecha">Vence: ${doc.FechaVencimiento || "—"}</div>
+      </div>
+      <div class="doc-derecha">
+        ${estado ? `<span class="badge ${badgeClass}">${estado}</span>` : ""}
+        ${pdfURL ? `<button class="btn-pdf" onclick="abrirPDF('${pdfURL}','${doc.Nombre}')">Ver PDF</button>` : ""}
+      </div>
+    `;
+    el.appendChild(div);
+  });
+}
+
+/* ══════════════════════════════════════════════
+   FUNCIONES DE APOYO
+══════════════════════════════════════════════ */
+function drivePreview(url) {
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  if (match) return `https://drive.google.com/file/d/${match[1]}/preview?rm=minimal&embedded=true`;
+  return url;
+}
+
+function tiempoDesde(f) {
+  if (!f) return "—";
+  const parts = f.split("/");
+  if (parts.length !== 3) return "—";
+  const [d, m, y] = parts.map(Number);
+  const desde = new Date(y, m - 1, d);
+  const hoy   = new Date();
+  let a  = hoy.getFullYear() - desde.getFullYear();
+  let ms = hoy.getMonth()    - desde.getMonth();
+  if (ms < 0) { a--; ms += 12; }
+  if (a > 0 && ms > 0) return `${a} año${a > 1 ? "s" : ""} ${ms} mes${ms > 1 ? "es" : ""}`;
+  if (a > 0) return `${a} año${a > 1 ? "s" : ""}`;
+  return `${ms} mes${ms > 1 ? "es" : ""}`;
+}
+
+function cambiarTab(idx) {
+  document.querySelectorAll(".tab").forEach((t, i)         => t.classList.toggle("activa", i === idx));
+  document.querySelectorAll(".tab-content").forEach((c, i) => c.classList.toggle("activa", i === idx));
+}
 
 function abrirPDF(url, titulo) {
-    document.getElementById("visor-titulo").textContent = titulo;
-    document.getElementById("iframe-pdf").src           = url;
-    document.getElementById("visor-pdf").style.display  = "flex";
-  }
+  document.getElementById("visor-titulo").textContent = titulo;
+  document.getElementById("iframe-pdf").src           = url;
+  document.getElementById("visor-pdf").style.display  = "flex";
+}
 
-  function cerrarPDF() {
-    document.getElementById("visor-pdf").style.display = "none";
-    document.getElementById("iframe-pdf").src          = "";
-  }
+function cerrarPDF() {
+  document.getElementById("visor-pdf").style.display = "none";
+  document.getElementById("iframe-pdf").src          = "";
+}
 
-  function cerrarSesion() {
-    location.reload();
-  }
+function cerrarSesion() { location.reload(); }
+
+/* ══════════════════════════════════════════════
+   INICIAR APP
+══════════════════════════════════════════════ */
+cargarDatos();
 </script>
 </body>
 </html>
