@@ -173,7 +173,18 @@ body {
 }
 .info-box label { font-size: 11px; color: #888; display: block; margin-bottom: 2px; }
 .info-box span  { font-size: 13px; font-weight: bold; color: #1f3055; }
-
+.btn-mapa {
+  background: #1f3055; color: white;
+  border: none; border-radius: 8px;
+  padding: 6px 12px; font-size: 12px;
+  font-weight: bold; cursor: pointer;
+  width: 100%; text-align: left;
+  margin-top: 2px;
+}
+.btn-mapa:hover { background: #264984; }
+.dropdown-mapa { display: none; flex-direction: column; gap: 4px; margin-top: 4px; }
+.dropdown-mapa.abierto { display: flex; }
+  
 .seccion { padding: 0 14px 6px; }
 .seccion-titulo {
   font-size: 11px; font-weight: bold; color: #ff7300;
@@ -281,12 +292,12 @@ body {
 
 .btn-salir {
   display: block; width: 100%; margin: 0; padding: 13px;
-  background: white; color: #888; border: none;
+  background: #C00000; color: white; border: none;
   border-top: 1px solid #ddd;
   border-radius: 0; font-size: 13px; text-align: center;
   cursor: pointer; font-weight: bold;
 }
-.btn-salir:hover { background: #f5f5f5; }
+.btn-salir:hover { background: #a00000; }
 .sin-datos { text-align: center; color: #aaa; font-size: 13px; padding: 20px 0; }
 </style>
 </head>
@@ -330,8 +341,9 @@ body {
   <div class="info-grid">
     <div class="info-box"><label>Área</label><span id="op-area"></span></div>
     <div class="info-box"><label>Años en empresa</label><span id="op-antiguedad"></span></div>
-    <div class="info-box" style="grid-column:1/-1"><label>Puesto</label><span id="op-puesto"></span></div>
-  </div>
+    <div class="info-box"><label>Puesto</label><span id="op-puesto"></span></div>
+    <div class="info-box" id="box-mapa"><label>Mapa de Riesgos</label><div id="op-mapa"></div></div>
+</div>
   <div class="seccion">
     <div class="seccion-titulo">Riesgos críticos del área</div>
     <div class="riesgos-wrap" id="op-riesgos"></div>
@@ -515,7 +527,41 @@ function mostrarPerfil(dni) {
   /* Área — muestra hasta 3 áreas */
   const areas = [op.Area1, op.Area2, op.Area3].filter(a => a && a.trim());
   document.getElementById("op-area").textContent = "Planta Óxidos";
+/* Mapa de Riesgos */
+const mapaLinks = [];
+areas.forEach(area => {
+  const fila = riesgos.find(r => r.Area === area && r["Mapa de Riesgos"]);
+  if (fila) mapaLinks.push({ area, url: fila["Mapa de Riesgos"] });
+});
 
+const mapaEl = document.getElementById("op-mapa");
+mapaEl.innerHTML = "";
+
+if (mapaLinks.length === 1) {
+  const btn = document.createElement("button");
+  btn.className = "btn-mapa";
+  btn.textContent = "Ver Mapa";
+  btn.onclick = () => abrirPDF(drivePreview(mapaLinks[0].url), "Mapa de Riesgos");
+  mapaEl.appendChild(btn);
+} else if (mapaLinks.length > 1) {
+  const btnPrincipal = document.createElement("button");
+  btnPrincipal.className = "btn-mapa";
+  btnPrincipal.textContent = "Ver Mapa ▼";
+  const dropdown = document.createElement("div");
+  dropdown.className = "dropdown-mapa";
+  mapaLinks.forEach(m => {
+    const op = document.createElement("button");
+    op.className = "btn-mapa";
+    op.textContent = m.area;
+    op.onclick = () => abrirPDF(drivePreview(m.url), "Mapa de Riesgos - " + m.area);
+    dropdown.appendChild(op);
+  });
+  btnPrincipal.onclick = () => dropdown.classList.toggle("abierto");
+  mapaEl.appendChild(btnPrincipal);
+  mapaEl.appendChild(dropdown);
+} else {
+  mapaEl.innerHTML = '<span style="color:#aaa;font-size:11px;">Sin mapa asignado</span>';
+}
   /* Riesgos — combina áreas sin duplicados */
   const riesgosSet = new Set();
   areas.forEach(area => {
