@@ -323,7 +323,7 @@ body {
     <div id="avatar-container"></div>
     <div class="header-info">
       <h1 id="op-nombre"></h1>
-      <p class="header-slogan">Tu seguridad vale más que el doré</p>
+      <p class="header-slogan" id="op-cargo"></p>
       <p class="header-dni" id="op-dni"></p>
     </div>
   </div>
@@ -508,12 +508,13 @@ function mostrarPerfil(dni) {
   /* Datos básicos */
   document.getElementById("op-nombre").textContent     = op.Nombre || "";
   document.getElementById("op-dni").textContent        = "DNI: " + dniLimpio(op.DNI);
-  document.getElementById("op-puesto").textContent     = op.Cargo || "";
+  document.getElementById("op-puesto").textContent = op.Area1 || "";
   document.getElementById("op-antiguedad").textContent = tiempoDesde(op.FechaIngreso || "");
+  document.getElementById("op-cargo").textContent      = op.Cargo || "";
 
   /* Área — muestra hasta 3 áreas */
   const areas = [op.Area1, op.Area2, op.Area3].filter(a => a && a.trim());
-  document.getElementById("op-area").textContent = areas.join(" / ") || "Sin área asignada";
+  document.getElementById("op-area").textContent = "Planta Óxidos";
 
   /* Riesgos — combina áreas sin duplicados */
   const riesgosSet = new Set();
