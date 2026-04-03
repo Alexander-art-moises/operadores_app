@@ -15,9 +15,6 @@ body {
   min-height: 100vh;
 }
 
-/* ══════════════════════════════
-   PANTALLA DE CARGA
-══════════════════════════════ */
 #pantalla-carga {
   min-height: 100vh;
   display: flex;
@@ -37,9 +34,6 @@ body {
 @keyframes spin { to { transform: rotate(360deg); } }
 .carga-texto { color: rgba(255,255,255,0.7); font-size: 14px; }
 
-/* ══════════════════════════════
-   PANTALLA DE PIN
-══════════════════════════════ */
 #pantalla-pin {
   min-height: 100vh;
   width: 100%;
@@ -78,14 +72,8 @@ body {
   backdrop-filter: blur(6px);
   box-shadow: 0 2px 12px rgba(31,78,121,0.10);
 }
-.pin-input:focus {
-  border-color: #ff8a00;
-  background: rgba(255,255,255,0.97);
-}
-.pin-input::placeholder {
-  color: #ff8a00;
-  opacity: 1;
-}
+.pin-input:focus { border-color: #ff8a00; background: rgba(255,255,255,0.97); }
+.pin-input::placeholder { color: #ff8a00; opacity: 1; }
 
 .btn-entrar {
   width: 100%;
@@ -125,9 +113,67 @@ body {
 }
 
 /* ══════════════════════════════
-   PANTALLA DE PERFIL
+   PANTALLA LISTA COLABORADORES
 ══════════════════════════════ */
-#pantalla-perfil { display: none; max-width: 420px; margin: 0 auto; padding-bottom: 32px; }
+#pantalla-lista {
+  display: none;
+  max-width: 420px;
+  margin: 0 auto;
+  padding-bottom: 32px;
+}
+.lista-header {
+  background: #1f3055;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.lista-header h2 { color: white; font-size: 16px; }
+.lista-buscar {
+  padding: 12px 14px;
+  background: #202b3d;
+}
+.lista-buscar input {
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: 10px;
+  border: 2px solid #354466;
+  background: #2a3650;
+  color: white;
+  font-size: 14px;
+  outline: none;
+}
+.lista-buscar input::placeholder { color: #8899bb; }
+.lista-buscar input:focus { border-color: #ff7300; }
+.lista-items { padding: 0 14px; }
+.lista-item {
+  background: white;
+  border-radius: 10px;
+  padding: 12px 14px;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  border: 1px solid #e0e0e0;
+}
+.lista-item:hover { background: #f0f4ff; border-color: #c5d3ea; }
+.lista-avatar {
+  width: 44px; height: 44px;
+  border-radius: 50%;
+  background: #264984;
+  border: 2px solid #ff7300;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px; font-weight: bold; color: white;
+  flex-shrink: 0; overflow: hidden;
+}
+.lista-avatar img { width: 100%; height: 100%; object-fit: cover; }
+.lista-info { flex: 1; min-width: 0; }
+.lista-nombre { font-size: 13px; font-weight: bold; color: #1f3055;
+                white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.lista-cargo  { font-size: 11px; color: #888; margin-top: 2px; }
+
+#pantalla-perfil { display: none; max-width: 420px; margin: 0 auto; padding-bottom: 0; }
 
 .header-band {
   background: #1f3055;
@@ -154,9 +200,9 @@ body {
   flex-shrink: 0;
 }
 .header-info { flex: 1; }
-.header-info h1      { font-size: 16px; font-weight: bold; color: #ffffff; margin-bottom: 3px; }
-.header-slogan       { font-size: 13px; color: #ff7300; margin-bottom: 2px; }
-.header-dni          { font-size: 11px; color: #ffffff; margin-top: 3px; }
+.header-info h1  { font-size: 16px; font-weight: bold; color: #ffffff; margin-bottom: 3px; }
+.header-slogan   { font-size: 13px; color: #ff7300; margin-bottom: 2px; }
+.header-dni      { font-size: 11px; color: #ffffff; margin-top: 3px; }
 
 .info-grid {
   display: grid;
@@ -184,7 +230,7 @@ body {
 .btn-mapa:hover { background: #264984; }
 .dropdown-mapa { display: none; flex-direction: column; gap: 4px; margin-top: 4px; }
 .dropdown-mapa.abierto { display: flex; }
-  
+
 .seccion { padding: 0 14px 6px; }
 .seccion-titulo {
   font-size: 11px; font-weight: bold; color: #ff7300;
@@ -225,11 +271,8 @@ body {
   margin-bottom: -2px;
   font-weight: bold;
 }
-.tab.activa {
-  color: #1f3055;
-  border-bottom-color: #ff7300;
-}
-.tab-content { display: none; padding: 4px 14px 8px; }
+.tab.activa { color: #1f3055; border-bottom-color: #ff7300; }
+.tab-content { display: none; padding: 4px 14px 8px; background: #202b3d; }
 .tab-content.activa { display: block; }
 
 .doc-item {
@@ -309,26 +352,31 @@ body {
   <p class="carga-texto">Cargando datos...</p>
 </div>
 
-<!-- PANTALLA 1 — PIN -->
+<!-- PANTALLA PIN -->
 <div id="pantalla-pin">
   <div class="pin-card">
-    <input
-      class="pin-input"
-      type="password"
-      id="input-pin"
-      maxlength="6"
-      placeholder="••••"
-      inputmode="numeric"
-      pattern="[0-9]*"
-      onkeydown="if(event.key==='Enter') verificarPin()"
-    >
+    <input class="pin-input" type="password" id="input-pin"
+           maxlength="6" placeholder="••••" inputmode="numeric" pattern="[0-9]*"
+           onkeydown="if(event.key==='Enter') verificarPin()">
     <button class="btn-entrar" onclick="verificarPin()">INGRESAR</button>
     <p class="pin-error" id="pin-error">PIN incorrecto. Intenta nuevamente.</p>
     <p class="pin-frase">Cada tarea, cada turno,<br>cada decisión importa.<br>Tú eres lo más valioso de<br>esta operación.</p>
   </div>
 </div>
 
-<!-- PANTALLA 2 — PERFIL -->
+<!-- PANTALLA LISTA -->
+<div id="pantalla-lista">
+  <div class="lista-header">
+    <h2>Selecciona un colaborador</h2>
+    <button class="btn-cerrar" onclick="cerrarSesion()">✕ Salir</button>
+  </div>
+  <div class="lista-buscar">
+    <input type="text" id="lista-search" placeholder="Buscar por nombre..." oninput="filtrarLista()">
+  </div>
+  <div class="lista-items" id="lista-items"></div>
+</div>
+
+<!-- PANTALLA PERFIL -->
 <div id="pantalla-perfil">
   <div class="header-band">
     <div id="avatar-container"></div>
@@ -343,7 +391,7 @@ body {
     <div class="info-box"><label>Años en empresa</label><span id="op-antiguedad"></span></div>
     <div class="info-box"><label>Puesto</label><span id="op-puesto"></span></div>
     <div class="info-box" id="box-mapa"><label>Mapa de Riesgos</label><div id="op-mapa"></div></div>
-</div>
+  </div>
   <div class="seccion">
     <div class="seccion-titulo">Riesgos críticos del área</div>
     <div class="riesgos-wrap" id="op-riesgos"></div>
@@ -369,27 +417,17 @@ body {
 </div>
 
 <script>
-/* ══════════════════════════════════════════════
-   CONFIGURACIÓN GOOGLE SHEETS
-══════════════════════════════════════════════ */
-const SHEETS_ID  = "1FoN-S-KOjs1vRuekQktGnX17_2pduM9ZjhDG3g8t5ZM";
+const SHEETS_ID   = "1FoN-S-KOjs1vRuekQktGnX17_2pduM9ZjhDG3g8t5ZM";
 const PIN_MAESTRO = "0000";
 const PIN_SUPER   = "2002";
 const PIN_ALEX    = "1008";
 const DNI_ALEX    = "75073340";
 
-/* Variables globales */
 let colaboradores = [];
 let riesgos       = [];
 let documentos    = [];
 let medico        = [];
 
-const params = new URLSearchParams(window.location.search);
-const idURL  = params.get("id");
-
-/* ══════════════════════════════════════════════
-   CARGA DE DATOS DESDE GOOGLE SHEETS
-══════════════════════════════════════════════ */
 function sheetURL(hoja) {
   return `https://docs.google.com/spreadsheets/d/${SHEETS_ID}/gviz/tq?tqx=out:csv&sheet=${encodeURIComponent(hoja)}`;
 }
@@ -439,44 +477,36 @@ async function cargarDatos() {
   }
 }
 
-/* ══════════════════════════════════════════════
-   LÓGICA DE PINES
-══════════════════════════════════════════════ */
+const dniLimpio = (d) => String(parseInt(d || "0"));
+
 function verificarPin() {
   const pin   = document.getElementById("input-pin").value.trim();
   const error = document.getElementById("pin-error");
   error.style.display = "none";
 
-  /* PIN maestro */
+  /* PIN maestro — ve lista de todos */
   if (pin === PIN_MAESTRO) {
-    if (!idURL) { mostrarError("QR inválido."); return; }
-    mostrarPerfil(idURL); return;
+    mostrarLista(); return;
   }
 
-  /* PIN de Alexander — solo su perfil */
+  /* PIN Alexander — solo su perfil */
   if (pin === PIN_ALEX) {
-    if (!idURL || idURL !== DNI_ALEX) { mostrarError("No tienes permiso para ver este perfil."); return; }
     mostrarPerfil(DNI_ALEX); return;
   }
 
-  /* PIN supervisión — cualquier perfil menos el de Alexander */
+  /* PIN supervisión — ve lista de todos menos Alexander */
   if (pin === PIN_SUPER) {
-    if (!idURL) { mostrarError("QR inválido."); return; }
-    if (idURL === DNI_ALEX) { mostrarError("No tienes permiso para ver este perfil."); return; }
-    mostrarPerfil(idURL); return;
+    mostrarLista(true); return;
   }
 
   /* PIN colaborador — 4 primeros dígitos del DNI */
-  const dniLimpio = (dni) => String(parseInt(dni || "0"));
   const op = colaboradores.find(c => {
     const dni = dniLimpio(c.DNI);
     return dni.startsWith(pin) && pin.length === 4 && dni !== DNI_ALEX;
   });
 
   if (op) {
-    const dni = dniLimpio(op.DNI);
-    if (!idURL || idURL !== dni) { mostrarError("No tienes permiso para ver este perfil."); return; }
-    mostrarPerfil(dni); return;
+    mostrarPerfil(dniLimpio(op.DNI)); return;
   }
 
   mostrarError("PIN incorrecto. Intenta nuevamente.");
@@ -490,14 +520,69 @@ function mostrarError(msg) {
 }
 
 /* ══════════════════════════════════════════════
+   LISTA DE COLABORADORES
+══════════════════════════════════════════════ */
+let listaFiltrada = [];
+
+function mostrarLista(ocultarAlex = false) {
+  listaFiltrada = ocultarAlex
+    ? colaboradores.filter(c => dniLimpio(c.DNI) !== DNI_ALEX)
+    : colaboradores;
+
+  document.getElementById("pantalla-pin").style.display    = "none";
+  document.getElementById("pantalla-lista").style.display  = "block";
+  document.getElementById("lista-search").value = "";
+  renderLista(listaFiltrada);
+}
+
+function filtrarLista() {
+  const q = document.getElementById("lista-search").value.toLowerCase();
+  const filtrados = listaFiltrada.filter(c => (c.Nombre || "").toLowerCase().includes(q));
+  renderLista(filtrados);
+}
+
+function renderLista(lista) {
+  const el = document.getElementById("lista-items");
+  el.innerHTML = "";
+  lista.forEach(c => {
+    const dni      = dniLimpio(c.DNI);
+    const partes   = (c.Nombre || "").split(" ");
+    const iniciales = (partes[1]?.[0] || "") + (partes[0]?.[0] || "");
+    const fotoURL  = c.Foto || "";
+
+    const item = document.createElement("div");
+    item.className = "lista-item";
+    item.onclick   = () => {
+      document.getElementById("pantalla-lista").style.display = "none";
+      mostrarPerfil(dni);
+    };
+
+    let avatarHTML = `<div class="lista-avatar">${iniciales.toUpperCase()}</div>`;
+    if (fotoURL.includes("drive.google.com")) {
+      const match = fotoURL.match(/\/d\/([a-zA-Z0-9_-]+)/);
+      if (match) {
+        avatarHTML = `<div class="lista-avatar"><img src="https://drive.google.com/thumbnail?id=${match[1]}&sz=w100" onerror="this.parentElement.innerHTML='${iniciales.toUpperCase()}'"></div>`;
+      }
+    }
+
+    item.innerHTML = `
+      ${avatarHTML}
+      <div class="lista-info">
+        <div class="lista-nombre">${c.Nombre || ""}</div>
+        <div class="lista-cargo">${c.Cargo || ""}</div>
+      </div>
+    `;
+    el.appendChild(item);
+  });
+}
+
+/* ══════════════════════════════════════════════
    MOSTRAR PERFIL
 ══════════════════════════════════════════════ */
 function mostrarPerfil(dni) {
-  const dniLimpio = (d) => String(parseInt(d || "0"));
   const op = colaboradores.find(c => dniLimpio(c.DNI) === dniLimpio(dni));
   if (!op) { mostrarError("Operador no encontrado."); return; }
 
-  /* Foto */
   const avatarContainer = document.getElementById("avatar-container");
   avatarContainer.innerHTML = "";
   const partes    = (op.Nombre || "").split(" ");
@@ -517,52 +602,52 @@ function mostrarPerfil(dni) {
     avatarContainer.innerHTML = `<div class="avatar-fallback">${iniciales.toUpperCase()}</div>`;
   }
 
-  /* Datos básicos */
   document.getElementById("op-nombre").textContent     = op.Nombre || "";
   document.getElementById("op-dni").textContent        = "DNI: " + dniLimpio(op.DNI);
-  document.getElementById("op-puesto").textContent = op.Area1 || "";
+  document.getElementById("op-puesto").textContent     = op.Area1 || "";
   document.getElementById("op-antiguedad").textContent = tiempoDesde(op.FechaIngreso || "");
   document.getElementById("op-cargo").textContent      = op.Cargo || "";
+  document.getElementById("op-area").textContent       = "Planta Óxidos";
 
-  /* Área — muestra hasta 3 áreas */
   const areas = [op.Area1, op.Area2, op.Area3].filter(a => a && a.trim());
-  document.getElementById("op-area").textContent = "Planta Óxidos";
-/* Mapa de Riesgos */
-const mapaLinks = [];
-areas.forEach(area => {
-  const fila = riesgos.find(r => r.Area === area && r["Mapa de Riesgos"]);
-  if (fila) mapaLinks.push({ area, url: fila["Mapa de Riesgos"] });
-});
 
-const mapaEl = document.getElementById("op-mapa");
-mapaEl.innerHTML = "";
-
-if (mapaLinks.length === 1) {
-  const btn = document.createElement("button");
-  btn.className = "btn-mapa";
-  btn.textContent = "Ver Mapa";
-  btn.onclick = () => abrirPDF(drivePreview(mapaLinks[0].url), "Mapa de Riesgos");
-  mapaEl.appendChild(btn);
-} else if (mapaLinks.length > 1) {
-  const btnPrincipal = document.createElement("button");
-  btnPrincipal.className = "btn-mapa";
-  btnPrincipal.textContent = "Ver Mapa ▼";
-  const dropdown = document.createElement("div");
-  dropdown.className = "dropdown-mapa";
-  mapaLinks.forEach(m => {
-    const op = document.createElement("button");
-    op.className = "btn-mapa";
-    op.textContent = m.area;
-    op.onclick = () => abrirPDF(drivePreview(m.url), "Mapa de Riesgos - " + m.area);
-    dropdown.appendChild(op);
+  /* Mapa de Riesgos */
+  const mapaLinks = [];
+  areas.forEach(area => {
+    const fila = riesgos.find(r => r.Area === area && r["Mapa de Riesgos"]);
+    if (fila) mapaLinks.push({ area, url: fila["Mapa de Riesgos"] });
   });
-  btnPrincipal.onclick = () => dropdown.classList.toggle("abierto");
-  mapaEl.appendChild(btnPrincipal);
-  mapaEl.appendChild(dropdown);
-} else {
-  mapaEl.innerHTML = '<span style="color:#aaa;font-size:11px;">Sin mapa asignado</span>';
-}
-  /* Riesgos — combina áreas sin duplicados */
+
+  const mapaEl = document.getElementById("op-mapa");
+  mapaEl.innerHTML = "";
+
+  if (mapaLinks.length === 1) {
+    const btn = document.createElement("button");
+    btn.className   = "btn-mapa";
+    btn.textContent = "Ver Mapa";
+    btn.onclick     = () => abrirPDF(drivePreview(mapaLinks[0].url), "Mapa de Riesgos");
+    mapaEl.appendChild(btn);
+  } else if (mapaLinks.length > 1) {
+    const btnPrincipal = document.createElement("button");
+    btnPrincipal.className   = "btn-mapa";
+    btnPrincipal.textContent = "Ver Mapa ▼";
+    const dropdown = document.createElement("div");
+    dropdown.className = "dropdown-mapa";
+    mapaLinks.forEach(m => {
+      const btn2 = document.createElement("button");
+      btn2.className   = "btn-mapa";
+      btn2.textContent = m.area;
+      btn2.onclick     = () => abrirPDF(drivePreview(m.url), "Mapa de Riesgos - " + m.area);
+      dropdown.appendChild(btn2);
+    });
+    btnPrincipal.onclick = () => dropdown.classList.toggle("abierto");
+    mapaEl.appendChild(btnPrincipal);
+    mapaEl.appendChild(dropdown);
+  } else {
+    mapaEl.innerHTML = '<span style="color:#aaa;font-size:11px;">Sin mapa asignado</span>';
+  }
+
+  /* Riesgos */
   const riesgosSet = new Set();
   areas.forEach(area => {
     riesgos.filter(r => r.Area === area).forEach(r => riesgosSet.add(r.Riesgo));
@@ -589,14 +674,13 @@ if (mapaLinks.length === 1) {
   renderDocs("tab-certificaciones", docsOp.filter(d => d.Tipo === "Certificación"));
   renderMedico("tab-medico", medicoOp);
 
-  /* Mostrar pantalla */
+  /* Resetear tabs */
+  cambiarTab(0);
+
   document.getElementById("pantalla-pin").style.display    = "none";
   document.getElementById("pantalla-perfil").style.display = "block";
 }
 
-/* ══════════════════════════════════════════════
-   RENDER DOCUMENTOS
-══════════════════════════════════════════════ */
 function renderDocs(contenedorId, docs) {
   const el = document.getElementById(contenedorId);
   el.innerHTML = "";
@@ -653,9 +737,6 @@ function renderMedico(contenedorId, docs) {
   });
 }
 
-/* ══════════════════════════════════════════════
-   FUNCIONES DE APOYO
-══════════════════════════════════════════════ */
 function drivePreview(url) {
   const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
   if (match) return `https://drive.google.com/file/d/${match[1]}/preview?rm=minimal&embedded=true`;
@@ -695,9 +776,6 @@ function cerrarPDF() {
 
 function cerrarSesion() { location.reload(); }
 
-/* ══════════════════════════════════════════════
-   INICIAR APP
-══════════════════════════════════════════════ */
 cargarDatos();
 </script>
 </body>
